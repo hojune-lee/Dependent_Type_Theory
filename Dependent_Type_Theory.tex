@@ -1,0 +1,433 @@
+
+\documentclass[12pt, letterpaper]{amsart}
+\usepackage[left=1in,right=1in,bottom=0.5in,top=0.8in]{geometry}
+\usepackage{amsfonts}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{epstopdf}
+\usepackage[pdfpagelabels,hyperindex]{hyperref}
+\usepackage{xcolor}
+\usepackage{amsthm}
+\usepackage{float}
+\usepackage{pgfplots}
+\usepackage{listings}
+\usepackage{longtable}
+\usepackage{mathrsfs}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage[most]{tcolorbox}
+\usepackage{amssymb}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{tikz-cd}
+\usepackage{comment}
+\usepackage{mathpartir}
+
+\linespread{1.2} 
+
+\hypersetup{
+pdftitle={.},
+pdfauthor={Hojune Lee},
+}
+
+\newcommand{\overbar}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}
+\DeclareRobustCommand{\stirling}{\genfrac\{\}{0pt}{}}
+\newtheorem{thm}{Theorem}[subsection]
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{conj}[thm]{Conjecture}
+\newtheorem{quest}[thm]{Question}
+\newtheorem{ppty}[thm]{Property}
+\newtheorem{ppties}[thm]{Properties}
+\newtheorem{axiom}[thm]{Axiom}
+\newtheorem{claim}[thm]{Claim}
+\newtheorem{prob}[thm]{Problem}
+
+
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{defns}[thm]{Definitions}
+\newtheorem{con}[thm]{Construction}
+\newtheorem{exmp}[thm]{Example}
+\newtheorem{exmps}[thm]{Examples}
+\newtheorem{notn}[thm]{Notation}
+\newtheorem{notns}[thm]{Notations}
+\newtheorem{addm}[thm]{Addendum}
+\newtheorem{exer}[thm]{Exercise}
+\newtheorem{limit}[thm]{Limitation}
+
+
+\theoremstyle{remark}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem{rems}[thm]{Remarks}
+\newtheorem{warn}[thm]{Warning}
+\newtheorem{sch}[thm]{Scholium}
+
+
+% newcommand bb
+    \newcommand{\BA}{{\mathbb {A}}} \newcommand{\BB}{{\mathbb {B}}}
+    \newcommand{\BC}{{\mathbb {C}}} \newcommand{\BD}{{\mathbb {D}}}
+    \newcommand{\BE}{{\mathbb {E}}} \newcommand{\BF}{{\mathbb {F}}}
+    \newcommand{\BG}{{\mathbb {G}}} \newcommand{\BH}{{\mathbb {H}}}
+    \newcommand{\BI}{{\mathbb {I}}} \newcommand{\BJ}{{\mathbb {J}}}
+    \newcommand{\BK}{{\mathbb {U}}} \newcommand{\BL}{{\mathbb {L}}}
+    \newcommand{\BM}{{\mathbb {M}}} \newcommand{\BN}{{\mathbb {N}}}
+    \newcommand{\BO}{{\mathbb {O}}} \newcommand{\BP}{{\mathbb {P}}}
+    \newcommand{\BQ}{{\mathbb {Q}}} \newcommand{\BR}{{\mathbb {R}}}
+    \newcommand{\BS}{{\mathbb {S}}} \newcommand{\BT}{{\mathbb {T}}}
+    \newcommand{\BU}{{\mathbb {U}}} \newcommand{\BV}{{\mathbb {V}}}
+    \newcommand{\BW}{{\mathbb {W}}} \newcommand{\BX}{{\mathbb {X}}}
+    \newcommand{\BY}{{\mathbb {Y}}} \newcommand{\BZ}{{\mathbb {Z}}}
+
+% newcommand  scr
+    \newcommand{\sA}{{\mathscr {A}}} \newcommand{\sB}{{\mathscr {B}}}
+    \newcommand{\sC}{{\mathscr {C}}} \newcommand{\sD}{{\mathscr {D}}}
+    \newcommand{\sE}{{\mathscr {E}}} \newcommand{\sF}{{\mathscr {F}}}
+    \newcommand{\sG}{{\mathscr {G}}} \newcommand{\sH}{{\mathscr {H}}}
+    \newcommand{\sI}{{\mathscr {I}}} \newcommand{\sJ}{{\mathscr {J}}}
+    \newcommand{\sK}{{\mathscr {K}}} \newcommand{\sL}{{\mathscr {L}}}
+    \newcommand{\sN}{{\mathscr {N}}} \newcommand{\sM}{{\mathscr {M}}}
+    \newcommand{\sO}{{\mathscr {O}}} \newcommand{\sP}{{\mathscr {P}}}
+    \newcommand{\sQ}{{\mathscr {Q}}} \newcommand{\sR}{{\mathscr {R}}}
+    \newcommand{\sS}{{\mathscr {S}}} \newcommand{\sT}{{\mathscr {T}}}
+    \newcommand{\sU}{{\mathscr {U}}} \newcommand{\sV}{{\mathscr {V}}}
+    \newcommand{\sW}{{\mathscr {W}}} \newcommand{\sX}{{\mathscr {X}}}
+    \newcommand{\sY}{{\mathscr {Y}}} \newcommand{\sZ}{{\mathscr {Z}}}
+
+
+% newcommand cal
+    \newcommand{\CA}{{\mathcal {A}}} \newcommand{\CB}{{\mathcal {B}}}
+    \newcommand{\CC}{{\mathcal {C}}} \newcommand{\CD}{{\mathcal {D}}}
+    \newcommand{\CE}{{\mathcal {E}}} \newcommand{\CF}{{\mathcal {F}}}
+    \newcommand{\CG}{{\mathcal {G}}} \newcommand{\CH}{{\mathcal {H}}}
+    \newcommand{\CI}{{\mathcal {I}}} \newcommand{\CJ}{{\mathcal {J}}}
+    \newcommand{\CK}{{\mathcal {K}}} \newcommand{\CL}{{\mathcal {L}}}
+    \newcommand{\CM}{{\mathcal {M}}} \newcommand{\CN}{{\mathcal {N}}}
+    \newcommand{\CO}{{\mathcal {O}}} \newcommand{\CP}{{\mathcal {P}}}
+    \newcommand{\CQ}{{\mathcal {Q}}} \newcommand{\CR}{{\mathcal {R}}}
+    \newcommand{\CS}{{\mathcal {S}}} \newcommand{\CT}{{\mathcal {T}}}
+    \newcommand{\CU}{{\mathcal {U}}} \newcommand{\CV}{{\mathcal {V}}}
+    \newcommand{\CW}{{\mathcal {W}}} \newcommand{\CX}{{\mathcal {X}}}
+    \newcommand{\CY}{{\mathcal {Y}}} \newcommand{\CZ}{{\mathcal {Z}}}
+
+    % newcommand frak
+     \newcommand{\fa}{{\mathfrak{a}}}  \newcommand{\fb}{{\mathfrak{b}}}
+     \newcommand{\fc}{{\mathfrak{c}}}  \newcommand{\fd}{{\mathfrak{d}}}
+     \newcommand{\fe}{{\mathfrak{e}}}  \newcommand{\ff}{{\mathfrak{f}}}
+     \newcommand{\fg}{{\mathfrak{g}}}  \newcommand{\fh}{{\mathfrak{h}}}
+     \newcommand{\fii}{{\mathfrak{i}}}  \newcommand{\fj}{{\mathfrak{j}}}
+     \newcommand{\fk}{{\mathfrak{m}}}  \newcommand{\fl}{{\mathfrak{l}}}
+     \newcommand{\fm}{{\mathfrak{m}}}  \newcommand{\fn}{{\mathfrak{n}}}
+     \newcommand{\fo}{{\mathfrak{o}}}  \newcommand{\fp}{{\mathfrak{p}}}
+     \newcommand{\fq}{{\mathfrak{q}}}  \newcommand{\fr}{{\mathfrak{r}}}
+     \newcommand{\fs}{{\mathfrak{s}}}  \newcommand{\ft}{{\mathfrak{t}}}
+     \newcommand{\fu}{{\mathfrak{u}}}  \newcommand{\fv}{{\mathfrak{v}}}
+     \newcommand{\fw}{{\mathfrak{w}}}  \newcommand{\fx}{{\mathfrak{x}}}
+     \newcommand{\fy}{{\mathfrak{y}}}  \newcommand{\fz}{{\mathfrak{z}}}
+
+    \newcommand{\fA}{{\mathfrak{A}}}  \newcommand{\fB}{{\mathfrak{B}}}
+     \newcommand{\fC}{{\mathfrak{C}}}  \newcommand{\fD}{{\mathfrak{D}}}
+     \newcommand{\fE}{{\mathfrak{E}}}  \newcommand{\fF}{{\mathfrak{F}}}
+     \newcommand{\fG}{{\mathfrak{G}}}  \newcommand{\fH}{{\mathfrak{H}}}
+     \newcommand{\fI}{{\mathfrak{I}}}  \newcommand{\fJ}{{\mathfrak{J}}}
+     \newcommand{\fK}{{\mathfrak{K}}}  \newcommand{\fL}{{\mathfrak{L}}}
+     \newcommand{\fM}{{\mathfrak{M}}}  \newcommand{\fN}{{\mathfrak{N}}}
+     \newcommand{\fO}{{\mathfrak{O}}}  \newcommand{\fP}{{\mathfrak{P}}}
+     \newcommand{\fQ}{{\mathfrak{Q}}}  \newcommand{\fR}{{\mathfrak{R}}}
+     \newcommand{\fS}{{\mathfrak{S}}}  \newcommand{\fT}{{\mathfrak{T}}}
+     \newcommand{\fU}{{\mathfrak{U}}}  \newcommand{\fV}{{\mathfrak{V}}}
+     \newcommand{\fW}{{\mathfrak{W}}}  \newcommand{\fX}{{\mathfrak{X}}}
+     \newcommand{\fY}{{\mathfrak{Y}}}  \newcommand{\fZ}{{\mathfrak{Z}}}
+
+
+
+ % newcommand :rm
+     \newcommand{\RA}{{\mathrm {A}}} \newcommand{\RB}{{\mathrm {B}}}
+    \newcommand{\RC}{{\mathrm {C}}} \newcommand{\RD}{{\mathrm {D}}}
+    \newcommand{\RE}{{\mathrm {E}}} \newcommand{\RF}{{\mathrm {F}}}
+    \newcommand{\RG}{{\mathrm {G}}} \newcommand{\RH}{{\mathrm {H}}}
+    \newcommand{\RI}{{\mathrm {I}}} \newcommand{\RJ}{{\mathrm {J}}}
+    \newcommand{\RK}{{\mathrm {K}}} \newcommand{\RL}{{\mathrm {L}}}
+    \newcommand{\RM}{{\mathrm {M}}} \newcommand{\RN}{{\mathrm {N}}}
+    \newcommand{\RO}{{\mathrm {O}}} \newcommand{\RP}{{\mathrm {P}}}
+    \newcommand{\RQ}{{\mathrm {Q}}} \newcommand{\RR}{{\mathrm {R}}}
+    \newcommand{\RS}{{\mathrm {S}}} \newcommand{\RT}{{\mathrm {T}}}
+    \newcommand{\RU}{{\mathrm {U}}} \newcommand{\RV}{{\mathrm {V}}}
+    \newcommand{\RW}{{\mathrm {W}}} \newcommand{\RX}{{\mathrm {X}}}
+    \newcommand{\RY}{{\mathrm {Y}}} \newcommand{\RZ}{{\mathrm {Z}}}
+
+    \newcommand{\Ad}{{\mathrm{Ad}}} \newcommand{\Aut}{{\mathrm{Aut}}}
+    \newcommand{\Br}{{\mathrm{Br}}} \newcommand{\Ch}{{\mathrm{Ch}}}
+    \newcommand{\cod}{{\mathrm{cod}}} \newcommand{\cont}{{\mathrm{cont}}}
+    \newcommand{\cl}{{\mathrm{cl}}}   \newcommand{\Cl}{{\mathrm{Cl}}}
+    \newcommand{\disc}{{\mathrm{disc}}}\newcommand{\Eis}{{\mathrm{Eis}}}
+    \newcommand{\Div}{{\mathrm{Div}}} \renewcommand{\div}{{\mathrm{div}}}
+    \newcommand{\End}{{\mathrm{End}}} \newcommand{\Frob}{{\mathrm{Frob}}}
+    \newcommand{\Gal}{{\mathrm{Gal}}} \newcommand{\GL}{{\mathrm{GL}}}
+    \newcommand{\Hom}{{\mathrm{Hom}}} \renewcommand{\Im}{{\mathrm{Im}}}
+    \newcommand{\Ind}{{\mathrm{Ind}}} \newcommand{\ind}{{\mathrm{ind}}}
+    \newcommand{\inv}{{\mathrm{inv}}}
+    \newcommand{\Isom}{{\mathrm{Isom}}} \newcommand{\Jac}{{\mathrm{Jac}}}
+    \newcommand{\ad}{{\mathrm{ad}}}  \newcommand{\Tr}{{\mathrm{Tr}}}
+    \newcommand{\Ker}{{\mathrm{Ker}}} \newcommand{\Ros}{{\mathrm{Ros}}}
+    \newcommand{\Lie}{{\mathrm{Lie}}} \newcommand{\Hol}{{\mathrm{Hol}}}
+
+    \newcommand{\cyc}{{\mathrm{cyc}}}\newcommand{\id}{{\mathrm{id}}}
+    \newcommand{\new}{{\mathrm{new}}} \newcommand{\NS}{{\mathrm{NS}}}
+    \newcommand{\ord}{{\mathrm{ord}}} \newcommand{\rank}{{\mathrm{rank}}}
+    \newcommand{\PGL}{{\mathrm{PGL}}} \newcommand{\Pic}{\mathrm{Pic}}
+    \newcommand{\cond}{\mathrm{cond}} \newcommand{\Is}{{\mathrm{Is}}}
+    \renewcommand{\Re}{{\mathrm{Re}}} \newcommand{\reg}{{\mathrm{reg}}}
+    \newcommand{\Res}{{\mathrm{Res}}} \newcommand{\Sel}{{\mathrm{Sel}}}
+    \newcommand{\RTr}{{\mathrm{Tr}}} \newcommand{\alg}{{\mathrm{alg}}}
+    \newcommand{\PSL}{{\mathrm{PSL}}}
+
+\newcommand{\coker}{{\mathrm{coker}}}
+\newcommand{\val}{{\mathrm{val}}} \newcommand{\sign}{{\mathrm{sign}}}
+\newcommand{\mult}{{\mathrm{mult}}} \newcommand{\Vol}{{\mathrm{Vol}}}
+\newcommand{\Meas}{{\mathrm{Meas}}}\renewcommand{\mod}{\ \mathrm{mod}\ }
+\newcommand{\Ann}{\mathrm{Ann}}
+\newcommand{\Tor}{\mathrm{Tor}}
+\newcommand{\Supp}{\mathrm{Supp}}\newcommand{\supp}{\mathrm{supp}}
+\newcommand{\Max}{\mathrm{Max}}
+\newcommand{\Coker}{\mathrm{Coker}}
+\newcommand{\Stab}{\mathrm{Stab}}
+\newcommand{\Irr}{\mathrm{Irr}}\newcommand{\Inf}{\mathrm{Inf}}\newcommand{\Sup}{\mathrm{Sup}}
+\newcommand{\rk}{\mathrm{rk}}\newcommand{\Fil}{\mathrm{Fil}}
+\newcommand{\Sim}{{\mathrm{Sim}}} \newcommand{\SL}{{\mathrm{SL}}}
+\newcommand{\Spec}{{\mathrm{Spec}}} \newcommand{\SO}{{\mathrm{SO}}}
+\newcommand{\SU}{{\mathrm{SU}}} \newcommand{\Sym}{{\mathrm{Sym}}}
+\newcommand{\sgn}{{\mathrm{sgn}}} \newcommand{\tr}{{\mathrm{tr}}}
+\newcommand{\tor}{{\mathrm{tor}}}  \newcommand{\ur}{{\mathrm{ur}}}
+\newcommand{\vol}{{\mathrm{vol}}}  \newcommand{\ab}{{\mathrm{ab}}}
+\newcommand{\Sh}{{\mathrm{Sh}}} \newcommand{\Ell}{{\mathrm{Ell}}}
+\newcommand{\Char}{{\mathrm{Char}}}\newcommand{\Tate}{{\mathrm{Tate}}}
+\newcommand{\corank}{{\mathrm{corank}}} \newcommand{\Cond}{{\mathrm{Cond}}}
+\newcommand{\Inn}{{\mathrm{Inn}}} \newcommand{\Spf}{{\mathrm{Spf}}}
+\newcommand{\Mat}{{\mathrm{Mat}}}
+
+
+    \font\cyr=wncyr10  \newcommand{\Sha}{\hbox{\cyr X}}
+    \newcommand{\wt}{\widetilde} \newcommand{\wh}{\widehat} \newcommand{\ck}{\check}
+    \newcommand{\pp}{\frac{\partial\bar\partial}{\pi i}}
+    \newcommand{\pair}[1]{\langle {#1} \rangle}
+    \newcommand{\wpair}[1]{\left\{{#1}\right\}}
+    \newcommand{\intn}[1]{\left( {#1} \right)}
+    \newcommand{\norm}[1]{\|{#1}\|}
+    \newcommand{\sfrac}[2]{\left( \frac {#1}{#2}\right)}
+    \newcommand{\ds}{\displaystyle}
+    \newcommand{\ov}{\overline}
+    \newcommand{\Gros}{Gr\"{o}ssencharaktere}
+    \newcommand{\incl}{\hookrightarrow}
+    \newcommand{\lra}{\longrightarrow}
+     \newcommand{\ra}{\rightarrow}
+    \newcommand{\imp}{\Longrightarrow}
+    \newcommand{\lto}{\longmapsto}
+    \newcommand{\bs}{\backslash}
+    \newcommand{\nequiv}{\equiv\hspace{-7.8pt}/}
+    \theoremstyle{plain}
+
+
+\definecolor{energy}{RGB}{114,0,172}
+\definecolor{freq}{RGB}{45,177,93}
+\definecolor{spin}{RGB}{251,0,29}
+\definecolor{signal}{RGB}{203,23,206}
+\definecolor{circle}{RGB}{217,86,16}
+\definecolor{average}{RGB}{203,23,206}
+\newcommand{\K}{\operatornamewithlimits{K}}
+\colorlet{shadecolor}{gray!20}
+\pgfplotsset{compat=1.9}
+\def\N{10}
+\def\M{4}
+\usepgflibrary{fpu}
+
+
+\def\upint{\mathchoice%
+    {\mkern13mu\overline{\vphantom{\intop}\mkern7mu}\mkern-20mu}%
+    {\mkern7mu\overline{\vphantom{\intop}\mkern7mu}\mkern-14mu}%
+    {\mkern7mu\overline{\vphantom{\intop}\mkern7mu}\mkern-14mu}%
+    {\mkern7mu\overline{\vphantom{\intop}\mkern7mu}\mkern-14mu}%
+  \int}
+\def\lowint{\mkern3mu\underline{\vphantom{\intop}\mkern7mu}\mkern-10mu\int}
+
+
+
+\makeatletter
+\let\c@equation\c@thm
+\raggedbottom
+\makeatother
+\numberwithin{equation}{section}
+%--------Meta Data: Fill in your info------
+\author[Hojune Lee]{Hojune Lee,\ \ 20210541}
+
+\title{Dependent Type Theory}
+\begin{document}
+
+\maketitle
+
+
+\tableofcontents
+
+\newpage 
+
+\section{Contexts and Substitutions}
+
+\subsection{Intuitions}
+
+In simple type theory, every thing was quite clear. This is because that, if we once fix the rules for types in simple type theory, 
+then all possible types are determined immediately by inductive way. We can informally think this as \lq propositional logic'-like type construction. 
+However, many things are different in dependent type system. Let's think dependent type system as \lq first order logic'-like type construction. 
+Imagine the formulas in first order logic as types in dependent type theory. 
+I hope that this is proper intuitive thinking for the main differences between two type systems. \\
+
+Once we imagine FOL formula-style type, it means that each type can contain variables and constants as it's representation. 
+It means that for each variables which are appeared in type representation, we must know what are the types of each variables.
+That is Context's role. \\
+
+Now, we need to construct the intuition for contexts and substitutions. Contexts are \lq wolrds' of terms and types. 
+And substitutions are \lq traffic way' between each worlds( contexts ). Then naturally, following questions are arising. 
+\begin{tcolorbox}[colback=yellow!10!white,colframe=red!75!black,title=Questions]
+    \begin{enumerate}
+        \item Is this world ( Context ) well-formed ?
+        \item In this world ( Context ) $\Gamma$, what terms of type $A$ are well-formed ? 
+        \item In this world ( Context ) $\Gamma$, what types are well-formed ? 
+        \item Between 2 worlds ( Context ) $\Delta$ and $\Gamma$, is traffic way ( substitution ) $\gamma$ well-formed ?
+        \item In this world ( Context ), which terms/types/substitutions are equivalent? 
+    \end{enumerate}
+\end{tcolorbox}
+
+Actually, this is all about \lq judgement rules' referred in Notation 2.3.1. of textbook. 
+Formally, we can write format for above judgements. 
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=red!75!black,title=Formal Representations for Judgements]
+    \begin{enumerate}
+        \item $\vdash \Gamma \text{ cx}$
+        \item $\Gamma \vdash a : A$
+        \item $\Gamma \vdash A \text{ type}$
+        \item $\Delta \vdash \gamma : \Gamma$
+        \item $\Gamma \vdash a = a' : A, \quad \Gamma \vdash A = A' \text{ type}, \quad \Delta \vdash \gamma = \gamma' : \Gamma$ 
+    \end{enumerate}
+\end{tcolorbox}
+
+In this chapter, we'll discuss the rules for above judgements. 
+Now, it's time to define explicit judgement rules that we referred. 
+
+\subsection{Contexts Judgements}
+
+\begin{mathpar}
+\inferrule
+{ }
+{\vdash \mathbf{1} \text{ cx}}
+\and   
+\inferrule
+{\vdash \Gamma \text{ cx} \quad \Gamma \vdash A \text{ type}}
+{\vdash \Gamma.A \text{ cx}}
+\end{mathpar}
+
+Here, $\mathbf{1}$ is empty context and each context is just list of types. (No variable names) It means that 
+we use De Bruijn index, i.e. in each context, index automatically determines the variable in context. 
+
+\subsection{Substitution Judgements} \quad \\
+
+However, before that the most 
+important one is understanding direction of traffic way (from now on, substitution). 
+
+\begin{defn}
+    If $\Delta \vdash \gamma : \Gamma$, then $\gamma$ is substitution from $\Delta$ to $\Gamma$. i.e. 
+    \[\gamma : \Delta \rightarrow \Gamma\]
+    However, it's role is send types and terms of $\Gamma$ into $\Delta$. (Note : Direction is important)
+\end{defn} 
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=red!75!black,title=Intuitions for direction of substitutions]
+    To understand why here use this notation, see following example. Imagine that contexts are \lq sets' 
+    and substitutions are function between them. There are 2 sets $\Delta, \Gamma$ and mapping $\gamma : \Delta \rightarrow \Gamma$. 
+    Suppose that there is a function $g : \Gamma \rightarrow \mathbb{R}$, which is defined on set $\Gamma$. How can we 
+    \lq use' this function in $\Delta$ set? One way is that, 
+    \[g : \Gamma \rightarrow \mathbb{R} \implies g \circ \gamma : \Delta \rightarrow \mathbb{R}\]
+    Then we can \lq use' the function $g$ in domain $\Delta$. This exactly corresponds in our notation. 
+    For $\Delta \vdash \gamma : \Gamma$, when we define $\gamma : \Delta \rightarrow \Gamma$, 
+    \[\Gamma \vdash A \text{ type} \implies \Delta \vdash A[\gamma] \text{ type}\]
+    Since $A$ is type in $\Gamma$ and the direction of substitution is $\gamma : \Delta \rightarrow \Gamma$, we say that 
+    $A[\gamma]$ is pull-backed type of $A$ through $\gamma : \Delta \rightarrow \Gamma$. 
+\end{tcolorbox}
+
+First, as above we can easily define the application rule of substitution. 
+\begin{mathpar}
+\inferrule
+{\Delta \vdash \gamma : \Gamma \quad \Gamma \vdash A \text{ type}}
+{\Delta \vdash A[\gamma] \text{ type}}
+\and   
+\inferrule
+{\Delta \vdash \gamma : \Gamma \quad \Gamma \vdash a : A}
+{\Delta \vdash a[\gamma] : A[\gamma]}
+\end{mathpar}
+
+These rules give us that we can immigrate(pull-back) terms and types of $\Gamma$ into $\Delta$. 
+And now, in our setting each contexts are different \lq worlds'. So we need to introduce explicit \textbf{weakening rule}, which intuitively means that 
+we can bring well-formed types and terms into $\Gamma$ into $\Gamma.A$, expanded context. 
+\begin{mathpar}
+\inferrule
+{\Gamma \vdash A \text{ type}}
+{\Gamma.A \vdash \mathbf{p} : \Gamma}
+\end{mathpar}
+In diagram, 
+\[
+\begin{tikzcd}
+{\Gamma.A} \arrow[r, "p"] & {\Gamma} \\
+\end{tikzcd}
+\]
+Means that, we can pull-back types $B$ and terms $t$ in world $\Gamma$ into $\Gamma.A$ by write $B[\mathbf{p}], t[\mathbf{p}]$
+Moreover, we can introduce following rules. (Actually, following rules need because our context-substitution system become a category.) 
+\begin{mathpar}
+\inferrule
+{\vdash \Gamma \text{ cx}}
+{\Gamma \vdash \mathbf{id} : \Gamma}
+\and   
+\inferrule
+{\Gamma_2 \vdash \gamma_1 : \Gamma_1 \quad \Gamma_1 \vdash \gamma_0 : \Gamma_0}
+{\Gamma_2 \vdash \gamma_0 \circ \gamma_1 : \Gamma_0}
+\end{mathpar}
+Second one can be conflict when we see first. However, let's draw the diagram. 
+\[
+\begin{tikzcd}
+{\Gamma_2} \arrow[r, "\gamma_1"] \arrow[d, "\gamma_0 \circ \gamma_1"'] & {\Gamma_1} \arrow[ld, "\gamma_0"] &\\
+{\Gamma_0} 
+\end{tikzcd}\]
+Then, above representation is very clear. It become same notation in our function calculus. Similarly, 
+\begin{mathpar}
+\inferrule
+{\Delta \vdash \gamma : \Gamma}
+{\Delta \vdash \gamma \circ \mathbf{id} = \mathbf{id} \circ \gamma = \gamma : \Gamma}
+\and   
+\inferrule
+{\Gamma_3 \vdash \gamma_2 : \Gamma_2 \quad \Gamma_2 \vdash \gamma_1 : \Gamma_1 \quad \Gamma_1 \vdash \gamma_0 : \Gamma_0}
+{\Gamma_3 \vdash (\gamma_0 \circ \gamma_1) \circ \gamma_2 = \gamma_0 \circ (\gamma_1 \circ \gamma_2) : \Gamma_0}
+\end{mathpar}
+\\
+This two rules are also very clear when we see the diagram. 
+\[
+\begin{tikzcd}
+{\Delta} \arrow[loop left, "id"] \arrow[r, "\gamma"] & {\Gamma} \arrow[loop right, "id"]
+\end{tikzcd}
+\]
+\[
+\begin{tikzcd}[row sep = large, column sep = huge]
+    {\Gamma_3} \arrow[r, "\gamma_2"]  \arrow[d, "(\gamma_0 \circ \gamma_1) \circ \gamma_2"'] & {\Gamma_2}\arrow[ld, "\gamma_0 \circ \gamma_1"] \arrow[d, "\gamma_1"] \\
+    {\Gamma_0} & {\Gamma_1} \arrow[l, "\gamma_0"] 
+\end{tikzcd}
+\quad
+\iff
+\quad
+\begin{tikzcd}[row sep = large, column sep = huge]
+{\Gamma_3} \arrow[r, "\gamma_2"] \arrow[rd, "\gamma_1 \circ \gamma_2"] \arrow[d, "\gamma_0 \circ (\gamma_1 \circ \gamma_2)"'] & {\Gamma_2} \arrow[d, "\gamma_1"] \\
+{\Gamma_0} & {\Gamma_1} \arrow[l, "\gamma_0"] 
+\end{tikzcd}
+\]
+\\
+Then we can imagine following equivalent rules clearly. 
+
+\newpage
+.
+\end{document}
