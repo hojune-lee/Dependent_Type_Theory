@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.11.21)  29 SEP 2025 20:27
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.11.21)  29 SEP 2025 23:45
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -747,33 +747,33 @@ File: l3backend-pdftex.def 2024-02-20 L3 backend support: PDF output (pdfTeX)
 ) (./Dependent_Type_Theory.aux)
 \openout1 = `Dependent_Type_Theory.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 266.
-LaTeX Font Info:    ... okay on input line 266.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 266.
-LaTeX Font Info:    ... okay on input line 266.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 266.
-LaTeX Font Info:    ... okay on input line 266.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 266.
-LaTeX Font Info:    ... okay on input line 266.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 266.
-LaTeX Font Info:    ... okay on input line 266.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 266.
-LaTeX Font Info:    ... okay on input line 266.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 266.
-LaTeX Font Info:    ... okay on input line 266.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 266.
-LaTeX Font Info:    ... okay on input line 266.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 266.
-LaTeX Font Info:    ... okay on input line 266.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 266.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 267.
+LaTeX Font Info:    ... okay on input line 267.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 267.
+LaTeX Font Info:    ... okay on input line 267.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 267.
+LaTeX Font Info:    ... okay on input line 267.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 267.
+LaTeX Font Info:    ... okay on input line 267.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 267.
+LaTeX Font Info:    ... okay on input line 267.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 267.
+LaTeX Font Info:    ... okay on input line 267.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 267.
+LaTeX Font Info:    ... okay on input line 267.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 267.
+LaTeX Font Info:    ... okay on input line 267.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 267.
+LaTeX Font Info:    ... okay on input line 267.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 267.
  (/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 266.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 267.
  (/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Trying to load font information for U+rsfs on input line 266.
+LaTeX Font Info:    Trying to load font information for U+rsfs on input line 267.
  (/usr/local/texlive/2024/texmf-dist/tex/latex/jknapltx/ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 )
@@ -834,7 +834,7 @@ Package caption Info: longtable package is loaded.
 Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
 )
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring OFF on input line 266.
+Package hyperref Info: Link coloring OFF on input line 267.
  (./Dependent_Type_Theory.out) (./Dependent_Type_Theory.out)
 \@outlinefile=\write5
 \openout5 = `Dependent_Type_Theory.out'.
@@ -852,17 +852,17 @@ Package: inputenc 2021/02/14 v1.3d Input encoding file
 \openout6 = `Dependent_Type_Theory.toc'.
 
  [1{/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 279--284
+Underfull \hbox (badness 10000) in paragraph at lines 280--285
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 285--288
+Underfull \hbox (badness 10000) in paragraph at lines 286--289
 
  []
 
 [2]
-Underfull \hbox (badness 10000) in paragraph at lines 332--333
+Underfull \hbox (badness 10000) in paragraph at lines 333--334
 
  []
 
@@ -875,18 +875,18 @@ Package rerunfilecheck Info: File `Dependent_Type_Theory.out' has not changed.
 (rerunfilecheck)             Checksum: 19E539D08FBB442F687CCD01E6392675;718.
  ) 
 Here is how much of TeX's memory you used:
- 42151 strings out of 474116
- 984638 string characters out of 5743681
- 1953187 words of memory out of 5000000
- 63675 multiletter control sequences out of 15000+600000
+ 42161 strings out of 474116
+ 984755 string characters out of 5743681
+ 1954187 words of memory out of 5000000
+ 63680 multiletter control sequences out of 15000+600000
  567296 words of font info for 74 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
  99i,15n,101p,825b,989s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Dependent_Type_Theory.pdf (5 pages, 142022 bytes).
+Output written on Dependent_Type_Theory.pdf (5 pages, 142927 bytes).
 PDF statistics:
- 166 PDF objects out of 1000 (max. 8388607)
- 109 compressed objects within 2 object streams
- 22 named destinations out of 1000 (max. 500000)
+ 172 PDF objects out of 1000 (max. 8388607)
+ 115 compressed objects within 2 object streams
+ 27 named destinations out of 1000 (max. 500000)
  189 words of extra memory for PDF output out of 10000 (max. 10000000)
 

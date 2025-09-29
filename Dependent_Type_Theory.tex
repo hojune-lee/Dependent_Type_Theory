@@ -64,6 +64,7 @@ pdfauthor={Hojune Lee},
 \newtheorem{rems}[thm]{Remarks}
 \newtheorem{warn}[thm]{Warning}
 \newtheorem{sch}[thm]{Scholium}
+\newenvironment{thmbox}[1][]{\begin{tcolorbox}[colback=yellow!10!white,colframe=red!75!black,title={#1}]}{\end{tcolorbox}}
 
 
 % newcommand bb
@@ -313,19 +314,19 @@ Formally, we can write format for above judgements.
 
 In this chapter, we'll discuss the rules for above judgements. 
 Now, it's time to define explicit judgement rules that we referred. 
-
+\newpage
 \subsection{Contexts Judgements}
-
-\begin{mathpar}
-\inferrule
-{ }
-{\vdash \mathbf{1} \text{ cx}}
-\and   
-\inferrule
-{\vdash \Gamma \text{ cx} \quad \Gamma \vdash A \text{ type}}
-{\vdash \Gamma.A \text{ cx}}
-\end{mathpar}
-
+\begin{con}
+    \begin{mathpar}
+    \inferrule
+    { }
+    {\vdash \mathbf{1} \text{ cx}}
+    \and   
+    \inferrule
+    {\vdash \Gamma \text{ cx} \quad \Gamma \vdash A \text{ type}}
+    {\vdash \Gamma.A \text{ cx}}
+    \end{mathpar}
+\end{con}
 Here, $\mathbf{1}$ is empty context and each context is just list of types. (No variable names) It means that 
 we use De Bruijn index, i.e. in each context, index automatically determines the variable in context. 
 
@@ -354,24 +355,27 @@ important one is understanding direction of traffic way (from now on, substituti
 \end{tcolorbox}
 
 First, as above we can easily define the application rule of substitution. 
-\begin{mathpar}
-\inferrule
-{\Delta \vdash \gamma : \Gamma \quad \Gamma \vdash A \text{ type}}
-{\Delta \vdash A[\gamma] \text{ type}}
-\and   
-\inferrule
-{\Delta \vdash \gamma : \Gamma \quad \Gamma \vdash a : A}
-{\Delta \vdash a[\gamma] : A[\gamma]}
-\end{mathpar}
-
+\begin{con}
+    \begin{mathpar}
+    \inferrule
+    {\Delta \vdash \gamma : \Gamma \quad \Gamma \vdash A \text{ type}}
+    {\Delta \vdash A[\gamma] \text{ type}}
+    \and   
+    \inferrule
+    {\Delta \vdash \gamma : \Gamma \quad \Gamma \vdash a : A}
+    {\Delta \vdash a[\gamma] : A[\gamma]}
+    \end{mathpar}
+\end{con}
 These rules give us that we can immigrate(pull-back) terms and types of $\Gamma$ into $\Delta$. 
 And now, in our setting each contexts are different \lq worlds'. So we need to introduce explicit \textbf{weakening rule}, which intuitively means that 
 we can bring well-formed types and terms into $\Gamma$ into $\Gamma.A$, expanded context. 
-\begin{mathpar}
-\inferrule
-{\Gamma \vdash A \text{ type}}
-{\Gamma.A \vdash \mathbf{p} : \Gamma}
-\end{mathpar}
+\begin{con}
+    \begin{mathpar}
+    \inferrule
+    {\Gamma \vdash A \text{ type}}
+    {\Gamma.A \vdash \mathbf{p} : \Gamma}
+    \end{mathpar}
+\end{con}
 In diagram, 
 \[
 \begin{tikzcd}
@@ -380,15 +384,17 @@ In diagram,
 \]
 Means that, we can pull-back types $B$ and terms $t$ in world $\Gamma$ into $\Gamma.A$ by write $B[\mathbf{p}], t[\mathbf{p}]$
 Moreover, we can introduce following rules. (Actually, following rules need because our context-substitution system become a category.) 
-\begin{mathpar}
-\inferrule
-{\vdash \Gamma \text{ cx}}
-{\Gamma \vdash \mathbf{id} : \Gamma}
-\and   
-\inferrule
-{\Gamma_2 \vdash \gamma_1 : \Gamma_1 \quad \Gamma_1 \vdash \gamma_0 : \Gamma_0}
-{\Gamma_2 \vdash \gamma_0 \circ \gamma_1 : \Gamma_0}
-\end{mathpar}
+\begin{con}
+    \begin{mathpar}
+    \inferrule
+    {\vdash \Gamma \text{ cx}}
+    {\Gamma \vdash \mathbf{id} : \Gamma}
+    \and   
+    \inferrule
+    {\Gamma_2 \vdash \gamma_1 : \Gamma_1 \quad \Gamma_1 \vdash \gamma_0 : \Gamma_0}
+    {\Gamma_2 \vdash \gamma_0 \circ \gamma_1 : \Gamma_0}
+    \end{mathpar}
+\end{con}
 Second one can be conflict when we see first. However, let's draw the diagram. 
 \[
 \begin{tikzcd}
@@ -396,16 +402,17 @@ Second one can be conflict when we see first. However, let's draw the diagram.
 {\Gamma_0} 
 \end{tikzcd}\]
 Then, above representation is very clear. It become same notation in our function calculus. Similarly, 
-\begin{mathpar}
-\inferrule
-{\Delta \vdash \gamma : \Gamma}
-{\Delta \vdash \gamma \circ \mathbf{id} = \mathbf{id} \circ \gamma = \gamma : \Gamma}
-\and   
-\inferrule
-{\Gamma_3 \vdash \gamma_2 : \Gamma_2 \quad \Gamma_2 \vdash \gamma_1 : \Gamma_1 \quad \Gamma_1 \vdash \gamma_0 : \Gamma_0}
-{\Gamma_3 \vdash (\gamma_0 \circ \gamma_1) \circ \gamma_2 = \gamma_0 \circ (\gamma_1 \circ \gamma_2) : \Gamma_0}
-\end{mathpar}
-\\
+\begin{con}
+    \begin{mathpar}
+    \inferrule
+    {\Delta \vdash \gamma : \Gamma}
+    {\Delta \vdash \gamma \circ \mathbf{id} = \mathbf{id} \circ \gamma = \gamma : \Gamma}
+    \and   
+    \inferrule
+    {\Gamma_3 \vdash \gamma_2 : \Gamma_2 \quad \Gamma_2 \vdash \gamma_1 : \Gamma_1 \quad \Gamma_1 \vdash \gamma_0 : \Gamma_0}
+    {\Gamma_3 \vdash (\gamma_0 \circ \gamma_1) \circ \gamma_2 = \gamma_0 \circ (\gamma_1 \circ \gamma_2) : \Gamma_0}
+    \end{mathpar}
+\end{con}
 This two rules are also very clear when we see the diagram. 
 \[
 \begin{tikzcd}
