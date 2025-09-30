@@ -1,5 +1,5 @@
 
-\documentclass[12pt, letterpaper]{amsart}
+\documentclass[12pt, a4paper, openany, twoside]{book}
 \usepackage[left=1in,right=1in,bottom=0.5in,top=0.8in]{geometry}
 \usepackage{amsfonts}
 \usepackage{amsmath, amssymb}
@@ -261,21 +261,42 @@ pdfauthor={Hojune Lee},
 \makeatother
 \numberwithin{equation}{section}
 %--------Meta Data: Fill in your info------
-\author[Hojune Lee]{Hojune Lee,\ \ 20210541}
+\author{Hojune Lee, 20210541}
 
 \title{Dependent Type Theory}
 \begin{document}
 
-\maketitle
+\begin{titlepage}
+    \begin{center}
+        \vspace*{9cm}
+            
+        \Huge
+        \textbf{Dependent Type Theory}
+    
+        \vspace{1cm}
+        \large
+        About Extensional Type Systems
+        \vspace{3cm}
+        
+        \LARGE
+        \textbf{Hojune Lee}
+            
+        \vspace{8cm}
+            
+        \normalsize
+        \textbf{School of Computing, KAIST}\\  
+    \end{center}
+\end{titlepage}
 
-
+\hypersetup{linkcolor=black}
 \tableofcontents
+\hypersetup{linkcolor=blue}
 
 \newpage 
 
-\section{Contexts and Substitutions}
+\chapter{Context and Substitutions}
 
-\subsection{Intuitions}
+\section{Intuitions}
 
 In simple type theory, every thing was quite clear. This is because that, if we once fix the rules for types in simple type theory, 
 then all possible types are determined immediately by inductive way. We can informally think this as \lq propositional logic'-like type construction. 
@@ -315,8 +336,8 @@ Formally, we can write format for above judgements.
 In this chapter, we'll discuss the rules for above judgements. 
 Now, it's time to define explicit judgement rules that we referred. 
 \newpage
-\subsection{Contexts Judgements}
-\begin{con}\label{cx judgement}
+\section{Contexts Judgements}
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 1.2.1.]\label{cx judgement}
     \begin{mathpar}
     \inferrule
     { }
@@ -326,20 +347,20 @@ Now, it's time to define explicit judgement rules that we referred.
     {\vdash \Gamma \text{ cx} \quad \Gamma \vdash A \text{ type}}
     {\vdash \Gamma.A \text{ cx}}
     \end{mathpar}
-\end{con}
+\end{tcolorbox}
 Here, $\mathbf{1}$ is empty context and each context is just list of types. (No variable names) It means that 
 we use De Bruijn index, i.e. in each context, index automatically determines the variable in context. 
 
-\subsection{Substitution Judgements}\label{subst judgement} \quad \\
+\section{Substitution Judgements}\label{subst judgement} \quad \\
 
 However, before that the most 
 important one is understanding direction of traffic way (from now on, substitution). 
 
-\begin{defn}
+\begin{tcolorbox}[colback=yellow!10!white,colframe=blue!75!black,title=Definition 1.3.1.]\label{1.3.1}
     If $\Delta \vdash \gamma : \Gamma$, then $\gamma$ is substitution from $\Delta$ to $\Gamma$. i.e. 
     \[\gamma : \Delta \rightarrow \Gamma\]
     However, it's role is send types and terms of $\Gamma$ into $\Delta$. (Note : Direction is important)
-\end{defn} 
+\end{tcolorbox}
 
 \begin{tcolorbox}[colback=yellow!10!white,colframe=red!75!black,title=1.3.  Intuitions for direction of substitutions]\label{intuition}
     To understand why here use this notation, see following example. Imagine that contexts are \lq sets' 
@@ -355,7 +376,7 @@ important one is understanding direction of traffic way (from now on, substituti
 \end{tcolorbox}
 
 First, as above we can easily define the application rule of substitution. 
-\begin{con}
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 1.3.2.]
     \begin{mathpar}
     \inferrule
     {\Delta \vdash \gamma : \Gamma \quad \Gamma \vdash A \text{ type}}
@@ -365,17 +386,17 @@ First, as above we can easily define the application rule of substitution.
     {\Delta \vdash \gamma : \Gamma \quad \Gamma \vdash a : A}
     {\Delta \vdash a[\gamma] : A[\gamma]}
     \end{mathpar}
-\end{con}
+\end{tcolorbox}
 These rules give us that we can immigrate(pull-back) terms and types of $\Gamma$ into $\Delta$. 
 And now, in our setting each contexts are different \lq worlds'. So we need to introduce explicit \textbf{weakening rule}, which intuitively means that 
 we can bring well-formed types and terms into $\Gamma$ into $\Gamma.A$, expanded context. 
-\begin{con}
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 1.3.3.]
     \begin{mathpar}
     \inferrule
     {\Gamma \vdash A \text{ type}}
     {\Gamma.A \vdash \mathbf{p} : \Gamma}
     \end{mathpar}
-\end{con}
+\end{tcolorbox}
 In diagram, 
 \[
 \begin{tikzcd}
@@ -384,7 +405,7 @@ In diagram,
 \]
 Means that, we can pull-back types $B$ and terms $t$ in world $\Gamma$ into $\Gamma.A$ by write $B[\mathbf{p}], t[\mathbf{p}]$
 Moreover, we can introduce following rules. (Actually, following rules need because our context-substitution system become a category.) 
-\begin{con}
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 1.3.4.]
     \begin{mathpar}
     \inferrule
     {\vdash \Gamma \text{ cx}}
@@ -394,7 +415,7 @@ Moreover, we can introduce following rules. (Actually, following rules need beca
     {\Gamma_2 \vdash \gamma_1 : \Gamma_1 \quad \Gamma_1 \vdash \gamma_0 : \Gamma_0}
     {\Gamma_2 \vdash \gamma_0 \circ \gamma_1 : \Gamma_0}
     \end{mathpar}
-\end{con}
+\end{tcolorbox}
 Second one can be conflict when we see first. However, let's draw the diagram. 
 \[
 \begin{tikzcd}
@@ -402,7 +423,7 @@ Second one can be conflict when we see first. However, let's draw the diagram.
 {\Gamma_0} 
 \end{tikzcd}\]
 Then, above representation is very clear. It become same notation in our function calculus. Similarly, 
-\begin{con}
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 1.3.5.]
     \begin{mathpar}
     \inferrule
     {\Delta \vdash \gamma : \Gamma}
@@ -412,7 +433,7 @@ Then, above representation is very clear. It become same notation in our functio
     {\Gamma_3 \vdash \gamma_2 : \Gamma_2 \quad \Gamma_2 \vdash \gamma_1 : \Gamma_1 \quad \Gamma_1 \vdash \gamma_0 : \Gamma_0}
     {\Gamma_3 \vdash (\gamma_0 \circ \gamma_1) \circ \gamma_2 = \gamma_0 \circ (\gamma_1 \circ \gamma_2) : \Gamma_0}
     \end{mathpar}
-\end{con}
+\end{tcolorbox}
 This two rules are also very clear when we see the diagram. 
 \[
 \begin{tikzcd}
@@ -435,8 +456,7 @@ This two rules are also very clear when we see the diagram.
 \]
 \\
 Then we can imagine following equivalent rules clearly. 
-\newpage 
-\begin{con}
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 1.3.6.]
 \begin{mathpar}
 \inferrule
 {\Gamma \vdash A \text{ type}}
@@ -458,7 +478,7 @@ Then we can imagine following equivalent rules clearly.
 {\Gamma_2 \vdash \gamma_1 : \Gamma_1 \quad \Gamma_1 \vdash \gamma_0 : \Gamma_0 \quad \Gamma_0 \vdash a : A}
 {\Gamma_2 \vdash a[\gamma_0 \circ \gamma_1] = a[\gamma_0][\gamma_1] : A[\gamma_0 \circ \gamma_1]}
 \]
-\\
+\end{tcolorbox}
 These rules are very intuitable. When we draw diagram, 
 \[
 \begin{tikzcd}
@@ -475,36 +495,35 @@ working same roles with $a$ in $\Gamma_0$. We've studied in box \ref{intuition},
     \Gamma_0
 \end{tikzcd}
 \]
-\end{con}
+
 One is pulling back via red way, and another one is via blue way. $a$ via red way is $a[\gamma_0 \circ \gamma_1]$ in $\Gamma_2$, 
 and via blue way is $a[\gamma_0][\gamma_1]$ (Actually, $a[\gamma_0]$ is $a$ in $\Gamma_1$ wolrd. So we take it again into $\Gamma_2$.)
 However, how can we use variable in well-formed context $\Gamma$ without own names? What is the meaning of De Bruijn index? Let's see how can we distinguish
 variables in each \lq world' $\Gamma$. 
 
-\begin{con}\label{con 1.3.7.}
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 1.3.7.]\label{con 1.3.7.}
 \[
 \inferrule
 {\Gamma \vdash A \text{ type}}
 {\Gamma.A \vdash \mathbf{q} : A[\mathbf{p}]}
 \]
-\end{con}
+\end{tcolorbox}
 We can see context as a stack. $\mathbf{q}$ always means the top element of stack. 
 However, stack $\Gamma.A$ contains type $A$ as top, which is type in $\Gamma$ wolrd. So 
 the top variable's type in $\Gamma.A$ is $A[\mathbf{p}]$ which we take $A$ from $\Gamma$ into $\Gamma.A$. Similarly, we can 
 access the any index of stack by following rule which is deribable from \ref{con 1.3.7.} 
-\begin{cor}
+\begin{tcolorbox}[colback=yellow!10!white,colframe=red!75!black,title=Corolary 1.3.8.]
 \[
 \inferrule
 {\Gamma \vdash A \text{ type} \quad \Gamma.A \vdash B_1 \text{ type} \quad \cdots \Gamma.A.B_1.\cdots \vdash B_n \text{ type}}
 {\Gamma.A.B_1.\cdots.B_n \vdash \mathbf{q}[\mathbf{p}^n] : A[\mathbf{p}^{n+1}]}
 \]
-\end{cor}
-\newpage
+\end{tcolorbox}
 Now, it's time to discuss our main theme in this subsection \ref{subst judgement}.
 Our ultimate goal is defining \lq valid traffic way from valid world to another valid world'. Let's discuss substitution 
 judgement rules very intuitively. First, suppose that we only have rules for context judgements \ref{cx judgement}. 
 The obvious thing that we must do first is, construct way from any $\Gamma$ into $\mathbf{1}$. The rules are simple. 
-\begin{con}
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 1.3.9.]
 \begin{mathpar}
 \inferrule
 {\vdash \Gamma \text{ cx}}
@@ -514,7 +533,7 @@ The obvious thing that we must do first is, construct way from any $\Gamma$ into
 {\Gamma \vdash \delta : \mathbf{1}}
 {\Gamma \vdash \delta = ! : \mathbf{1}}
 \end{mathpar}
-\end{con}
+\end{tcolorbox}
 \vspace{4mm}
 What does it mean? It is 'way' from $\Gamma$ to $\mathbf{1}$. The role of this way is transfer terms and types in $\mathbf{1}$ into $\Gamma$ world. 
 What terms and types are well-formed in $\mathbf{1}$? Just closed terms and types (No Variables). It is obviously 
@@ -522,11 +541,11 @@ terms and types in $\Gamma$ also. So we define the way is \lq unique' here. With
 we can always transfer closed terms(e.g. 1, (1+1)) and closed types from $\mathbf{1}$ to any well-formed context $\Gamma$.  
 Let's think this as a base case of our definition of traffic ways. Following construction determines how can we extends substitutions. 
 \vspace{4mm}
-\begin{con}\label{subst extend}
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 1.3.10.]\label{subst extend}
 \[\inferrule
 {\Delta \vdash \gamma : \Gamma \quad \Gamma \vdash A \text{ type} \quad \Delta \vdash a : A[\gamma]}
 {\Delta \vdash \gamma.a : \Gamma.A}\]
-\end{con}
+\end{tcolorbox}
 Let's draw diagram. \\
 \[
 \begin{tikzcd}
@@ -541,8 +560,7 @@ it has $n+1$ variables ($x_1, \cdots, x_n, x_{n+1}$). The key understanding is t
 terms and types in $\Gamma.A$ world, it can have $x_1, \cdots, x_{n+1}$ as symbol. When we meet $x_{n+1}$, then substitution it by $a$, and when we meet $x_1, \cdots, x_n$, then substitution it by following $\gamma$. 
 Then since $a$ is well-formed term in $\Delta$ and it's type is $A[\gamma]$, which do roles of $A$ in $\Delta$ world, so such substitution also works well. This is very powerful intuition. 
 Now, with above understanding, let's define more challenging and powerful rules for substitutions. 
-\newpage 
-\begin{con}
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 1.3.11.]
 
 \[
 \inferrule
@@ -562,7 +580,7 @@ Now, with above understanding, let's define more challenging and powerful rules 
 {\Delta \vdash \gamma = (\mathbf{p}\circ \gamma).\mathbf{q}[\gamma] : \Gamma.A}
 \]
 \\
-\end{con} 
+\end{tcolorbox} 
 
 There rules are seemed to be very unclear. However, see following diagram. For first rule, 
 \[

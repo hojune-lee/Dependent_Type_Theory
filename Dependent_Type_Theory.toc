@@ -1,4 +1,4 @@
-\contentsline {section}{\tocsection {}{1}{Contexts and Substitutions}}{2}{section.1}%
-\contentsline {subsection}{\tocsubsection {}{1.1}{Intuitions}}{2}{subsection.1.1}%
-\contentsline {subsection}{\tocsubsection {}{1.2}{Contexts Judgements}}{3}{subsection.1.2}%
-\contentsline {subsection}{\tocsubsection {}{1.3}{Substitution Judgements}}{3}{subsection.1.3}%
+\contentsline {chapter}{\numberline {1}Context and Substitutions}{3}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Intuitions}{3}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Contexts Judgements}{5}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Substitution Judgements}{5}{section.1.3}%
