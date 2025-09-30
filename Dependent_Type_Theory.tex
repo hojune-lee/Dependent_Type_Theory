@@ -316,7 +316,7 @@ In this chapter, we'll discuss the rules for above judgements.
 Now, it's time to define explicit judgement rules that we referred. 
 \newpage
 \subsection{Contexts Judgements}
-\begin{con}
+\begin{con}\label{cx judgement}
     \begin{mathpar}
     \inferrule
     { }
@@ -330,7 +330,7 @@ Now, it's time to define explicit judgement rules that we referred.
 Here, $\mathbf{1}$ is empty context and each context is just list of types. (No variable names) It means that 
 we use De Bruijn index, i.e. in each context, index automatically determines the variable in context. 
 
-\subsection{Substitution Judgements} \quad \\
+\subsection{Substitution Judgements}\label{subst judgement} \quad \\
 
 However, before that the most 
 important one is understanding direction of traffic way (from now on, substitution). 
@@ -341,7 +341,7 @@ important one is understanding direction of traffic way (from now on, substituti
     However, it's role is send types and terms of $\Gamma$ into $\Delta$. (Note : Direction is important)
 \end{defn} 
 
-\begin{tcolorbox}[colback=yellow!10!white,colframe=red!75!black,title=Intuitions for direction of substitutions]
+\begin{tcolorbox}[colback=yellow!10!white,colframe=red!75!black,title=1.3.  Intuitions for direction of substitutions]\label{intuition}
     To understand why here use this notation, see following example. Imagine that contexts are \lq sets' 
     and substitutions are function between them. There are 2 sets $\Delta, \Gamma$ and mapping $\gamma : \Delta \rightarrow \Gamma$. 
     Suppose that there is a function $g : \Gamma \rightarrow \mathbb{R}$, which is defined on set $\Gamma$. How can we 
@@ -419,6 +419,7 @@ This two rules are also very clear when we see the diagram.
 {\Delta} \arrow[loop left, "id"] \arrow[r, "\gamma"] & {\Gamma} \arrow[loop right, "id"]
 \end{tikzcd}
 \]
+\\
 \[
 \begin{tikzcd}[row sep = large, column sep = huge]
     {\Gamma_3} \arrow[r, "\gamma_2"]  \arrow[d, "(\gamma_0 \circ \gamma_1) \circ \gamma_2"'] & {\Gamma_2}\arrow[ld, "\gamma_0 \circ \gamma_1"] \arrow[d, "\gamma_1"] \\
@@ -434,7 +435,177 @@ This two rules are also very clear when we see the diagram.
 \]
 \\
 Then we can imagine following equivalent rules clearly. 
+\newpage 
+\begin{con}
+\begin{mathpar}
+\inferrule
+{\Gamma \vdash A \text{ type}}
+{\Gamma \vdash A[\mathbf{id}] = A \text{ type}}
+\and   
+\inferrule
+{\Gamma \vdash a : A}
+{\Gamma \vdash a[\mathbf{id}] = a : A}
+\end{mathpar}
+\\
+\[
+\inferrule
+{\Gamma_2 \vdash \gamma_1 : \Gamma_1 \quad \Gamma_1 \vdash \gamma_0 : \Gamma_0 \quad \Gamma_0 \vdash A \text{ type}}
+{\Gamma_2 \vdash A[\gamma_0 \circ \gamma_1] = A[\gamma_0][\gamma_1] \text{ type}}
+\]
+\\
+\[
+\inferrule
+{\Gamma_2 \vdash \gamma_1 : \Gamma_1 \quad \Gamma_1 \vdash \gamma_0 : \Gamma_0 \quad \Gamma_0 \vdash a : A}
+{\Gamma_2 \vdash a[\gamma_0 \circ \gamma_1] = a[\gamma_0][\gamma_1] : A[\gamma_0 \circ \gamma_1]}
+\]
+\\
+These rules are very intuitable. When we draw diagram, 
+\[
+\begin{tikzcd}
+    \Gamma_2 \arrow[d, "\gamma_0 \circ \gamma_1"'] \arrow[r, "\gamma_1"] & \Gamma_1 \arrow[ld, "\gamma_0"] \\
+    \Gamma_0
+\end{tikzcd}
+\]
+For example, look the last rule. $a$ is term in the world $\Gamma_0$. We want to 
+bring this term into $\Gamma_2$. Bring means that, we want to use \lq function' $a$ in $\Gamma_2$. i.e. such term in $\Gamma_2$ is 
+working same roles with $a$ in $\Gamma_0$. We've studied in box \ref{intuition}, there are 2 ways to bring $a$ from $\Gamma_0$ into $\Gamma_2$. 
+\[
+\begin{tikzcd}
+    \Gamma_2 \arrow[d, "\gamma_0 \circ \gamma_1"', red] \arrow[r, "\gamma_1", blue] & \Gamma_1 \arrow[ld, "\gamma_0", blue] \\
+    \Gamma_0
+\end{tikzcd}
+\]
+\end{con}
+One is pulling back via red way, and another one is via blue way. $a$ via red way is $a[\gamma_0 \circ \gamma_1]$ in $\Gamma_2$, 
+and via blue way is $a[\gamma_0][\gamma_1]$ (Actually, $a[\gamma_0]$ is $a$ in $\Gamma_1$ wolrd. So we take it again into $\Gamma_2$.)
+However, how can we use variable in well-formed context $\Gamma$ without own names? What is the meaning of De Bruijn index? Let's see how can we distinguish
+variables in each \lq world' $\Gamma$. 
 
+\begin{con}\label{con 1.3.7.}
+\[
+\inferrule
+{\Gamma \vdash A \text{ type}}
+{\Gamma.A \vdash \mathbf{q} : A[\mathbf{p}]}
+\]
+\end{con}
+We can see context as a stack. $\mathbf{q}$ always means the top element of stack. 
+However, stack $\Gamma.A$ contains type $A$ as top, which is type in $\Gamma$ wolrd. So 
+the top variable's type in $\Gamma.A$ is $A[\mathbf{p}]$ which we take $A$ from $\Gamma$ into $\Gamma.A$. Similarly, we can 
+access the any index of stack by following rule which is deribable from \ref{con 1.3.7.} 
+\begin{cor}
+\[
+\inferrule
+{\Gamma \vdash A \text{ type} \quad \Gamma.A \vdash B_1 \text{ type} \quad \cdots \Gamma.A.B_1.\cdots \vdash B_n \text{ type}}
+{\Gamma.A.B_1.\cdots.B_n \vdash \mathbf{q}[\mathbf{p}^n] : A[\mathbf{p}^{n+1}]}
+\]
+\end{cor}
 \newpage
+Now, it's time to discuss our main theme in this subsection \ref{subst judgement}.
+Our ultimate goal is defining \lq valid traffic way from valid world to another valid world'. Let's discuss substitution 
+judgement rules very intuitively. First, suppose that we only have rules for context judgements \ref{cx judgement}. 
+The obvious thing that we must do first is, construct way from any $\Gamma$ into $\mathbf{1}$. The rules are simple. 
+\begin{con}
+\begin{mathpar}
+\inferrule
+{\vdash \Gamma \text{ cx}}
+{\Gamma \vdash ! : \mathbf{1}}
+\and   
+\inferrule
+{\Gamma \vdash \delta : \mathbf{1}}
+{\Gamma \vdash \delta = ! : \mathbf{1}}
+\end{mathpar}
+\end{con}
+\vspace{4mm}
+What does it mean? It is 'way' from $\Gamma$ to $\mathbf{1}$. The role of this way is transfer terms and types in $\mathbf{1}$ into $\Gamma$ world. 
+What terms and types are well-formed in $\mathbf{1}$? Just closed terms and types (No Variables). It is obviously 
+terms and types in $\Gamma$ also. So we define the way is \lq unique' here. With this substitution, 
+we can always transfer closed terms(e.g. 1, (1+1)) and closed types from $\mathbf{1}$ to any well-formed context $\Gamma$.  
+Let's think this as a base case of our definition of traffic ways. Following construction determines how can we extends substitutions. 
+\vspace{4mm}
+\begin{con}\label{subst extend}
+\[\inferrule
+{\Delta \vdash \gamma : \Gamma \quad \Gamma \vdash A \text{ type} \quad \Delta \vdash a : A[\gamma]}
+{\Delta \vdash \gamma.a : \Gamma.A}\]
+\end{con}
+Let's draw diagram. \\
+\[
+\begin{tikzcd}
+    \Delta \arrow[r, "\gamma"] \arrow[rd, "\gamma.a"'] & \Gamma \arrow[d, "id.a", shift left]\\
+    & \Gamma.A \arrow[u, "p", shift left]
+\end{tikzcd}
+\]
+\\
+Is it clear? It means that, suppose that $\Gamma$ has $n$ variables ($x_1, \cdots, x_n$). Here we denote names for each variables for representation. 
+And then, in this context $\Gamma$, $A$ is well-formed type. Then automatically $\Gamma.A$ is defined, where 
+it has $n+1$ variables ($x_1, \cdots, x_n, x_{n+1}$). The key understanding is that, when we bring 
+terms and types in $\Gamma.A$ world, it can have $x_1, \cdots, x_{n+1}$ as symbol. When we meet $x_{n+1}$, then substitution it by $a$, and when we meet $x_1, \cdots, x_n$, then substitution it by following $\gamma$. 
+Then since $a$ is well-formed term in $\Delta$ and it's type is $A[\gamma]$, which do roles of $A$ in $\Delta$ world, so such substitution also works well. This is very powerful intuition. 
+Now, with above understanding, let's define more challenging and powerful rules for substitutions. 
+\newpage 
+\begin{con}
+
+\[
+\inferrule
+{\Delta \vdash \gamma : \Gamma \quad \Gamma \vdash A \text{ type} \quad \Delta \vdash a : A[\gamma]}
+{\Delta \vdash \mathbf{p} \circ (\gamma.a) = \gamma : \Gamma}
+\]
+\\
+\[
+\inferrule
+{\Delta \vdash \gamma : \Gamma \quad \Gamma \vdash A \text{ type} \quad \Delta \vdash a : A[\gamma]}
+{\Delta \vdash \mathbf{q}[\gamma.a] = a : A[\gamma]}
+\]
+\\
+\[
+\inferrule
+{\Gamma \vdash A \text{ type} \quad \Delta \vdash \gamma : \Gamma.A}
+{\Delta \vdash \gamma = (\mathbf{p}\circ \gamma).\mathbf{q}[\gamma] : \Gamma.A}
+\]
+\\
+\end{con} 
+
+There rules are seemed to be very unclear. However, see following diagram. For first rule, 
+\[
+\begin{tikzcd}
+    \Delta \arrow[r, "\gamma"] \arrow[rd, "\gamma.a"'] & \Gamma \arrow[d, "id.a", shift left]\\
+    & \Gamma.A \arrow[u, "p", shift left]
+\end{tikzcd}
+\]
+We can represent the first rule as following way. 
+
+\[
+\begin{tikzcd}
+    \Delta \arrow[r, "\gamma", red] \arrow[rd, "\gamma.a"', blue] & \Gamma \arrow[d, "id.a", shift left]\\
+    & \Gamma.A \arrow[u, "p", shift left, blue]
+\end{tikzcd}
+\]
+So we can intuitively know that $\gamma$ and $\mathbf{p} \circ (\gamma.a)$ represent same traffic way from $\Delta$ to $\Gamma$. 
+For second rule, we already explained in front page. When we meet $x_{n+1}$ (i.e. meet $q$ in $\Gamma.A$) 
+then bring it from $\Gamma.A$ into $\Delta$ and substitute by $a$, term of $\Delta$. This rule explicitly claim this intuition. 
+For third rule, let's draw slightly changed diagram. 
+
+\[
+\begin{tikzcd}
+    \Delta  \arrow[rd, "\gamma"'] & \Gamma \arrow[d, "id.?", shift left]\\
+    & \Gamma.A \arrow[u, "p", shift left]
+\end{tikzcd}
+\]
+
+Can we see what is $(\mathbf{p} \circ \gamma)$ here? We can draw 
+
+\[
+\begin{tikzcd}
+    \Delta \arrow[r, "p\circ \gamma", red] \arrow[rd, "\gamma"'] & \Gamma \arrow[d, "id.?", shift left]\\
+    & \Gamma.A \arrow[u, "p", shift left]
+\end{tikzcd}
+\]
+
+Now, see \ref{subst extend}. When we make $\mathbf{p} \circ \gamma : \Delta \rightarrow \Gamma$ to something that $\Delta \rightarrow \Gamma.A$, 
+we append something to $\mathbf{p} \circ \gamma$. Here, actually the answer is already given. Suppose 
+$q$ in $\Gamma.A$, it has type $A[\mathbf{p}]$ in $\Gamma.A$. We define $\gamma$ by, how we take variable $\mathbf{q}$ in $\Gamma.A$ to $\Delta$? 
+Actually its answer is $\mathbf{q}[\gamma]$. It has type $A[\mathbf{p}][\gamma] = A[\mathbf{p} \circ \gamma]$ in $\Delta$. 
+So to make same substitution with $\gamma$, we must append $\mathbf{q}[\gamma]$ at $\mathbf{p}\circ \gamma$. This intuition gives us $\gamma = (\mathbf{p}\circ \gamma).\mathbf{q}[\gamma]$ in $\Delta$. 
+
+\newpage  
 .
 \end{document}
