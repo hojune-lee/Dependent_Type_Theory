@@ -541,7 +541,7 @@ terms and types in $\Gamma$ also. So we define the way is \lq unique' here. With
 we can always transfer closed terms(e.g. 1, (1+1)) and closed types from $\mathbf{1}$ to any well-formed context $\Gamma$.  
 Let's think this as a base case of our definition of traffic ways. Following construction determines how can we extends substitutions. 
 \vspace{4mm}
-\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 1.3.10.]\label{subst extend}
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 1.3.10.]\hypertarget{subst extend}{}
 \[\inferrule
 {\Delta \vdash \gamma : \Gamma \quad \Gamma \vdash A \text{ type} \quad \Delta \vdash a : A[\gamma]}
 {\Delta \vdash \gamma.a : \Gamma.A}\]
@@ -560,7 +560,7 @@ it has $n+1$ variables ($x_1, \cdots, x_n, x_{n+1}$). The key understanding is t
 terms and types in $\Gamma.A$ world, it can have $x_1, \cdots, x_{n+1}$ as symbol. When we meet $x_{n+1}$, then substitution it by $a$, and when we meet $x_1, \cdots, x_n$, then substitution it by following $\gamma$. 
 Then since $a$ is well-formed term in $\Delta$ and it's type is $A[\gamma]$, which do roles of $A$ in $\Delta$ world, so such substitution also works well. This is very powerful intuition. 
 Now, with above understanding, let's define more challenging and powerful rules for substitutions. 
-\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 1.3.11.]
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 1.3.11.]\hypertarget{construction 1.3.11}{}
 
 \[
 \inferrule
@@ -623,6 +623,133 @@ we append something to $\mathbf{p} \circ \gamma$. Here, actually the answer is a
 $q$ in $\Gamma.A$, it has type $A[\mathbf{p}]$ in $\Gamma.A$. We define $\gamma$ by, how we take variable $\mathbf{q}$ in $\Gamma.A$ to $\Delta$? 
 Actually its answer is $\mathbf{q}[\gamma]$. It has type $A[\mathbf{p}][\gamma] = A[\mathbf{p} \circ \gamma]$ in $\Delta$. 
 So to make same substitution with $\gamma$, we must append $\mathbf{q}[\gamma]$ at $\mathbf{p}\circ \gamma$. This intuition gives us $\gamma = (\mathbf{p}\circ \gamma).\mathbf{q}[\gamma]$ in $\Delta$. 
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=brown!75!black,title=Exercise 2.1]
+
+Prove that if $\Gamma \vdash \gamma : \Gamma.A$, then $\mathbf{p} \circ \gamma = \textbf{id}$
+\begin{proof}
+    How can we define $\gamma$? The intuitive meaning of $\gamma$ is that, way to bring types and terms 
+    of $\Gamma.A$ into $\Gamma$. Imagine that $\Gamma.A$ contains types of $x_1, \cdots, x_{n+1}$ and 
+    $\Gamma$ contains types of $x_1, \cdots, x_n$. To bring types and terms in $\Gamma.A$ into $\Gamma$, only to do is when we meet $x_{n+1}$, substitute it with well-formed term in $\Gamma$ context. 
+    By this way we can delete the appearance of $x_{n+1}$ and make types and terms in $\Gamma.A$ become types and terms in $\Gamma$. 
+    So, $\gamma$ is defined by following way. This is construction \hyperlink{subst extend}{1.3.10.}
+    \[
+    \inferrule
+    {\Gamma \vdash \textbf{id} : \Gamma \quad \Gamma \vdash A \text{ type} \quad \Gamma \vdash a : A}
+    {\Gamma \vdash \underbrace{\textbf{id}.a}_{\gamma} : \Gamma.A}
+    \]
+    However, according to \hyperlink{construction 1.3.11}{construction 1.3.11} we can know that 
+    \[\mathbf{p} \circ (\mathbf{id}.a) = \mathbf{id}\]
+\end{proof}
+\end{tcolorbox}
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=brown!75!black,title=Exercise 2.2]
+Show that $(\gamma.a) \circ \delta = (\gamma \circ \delta).a[\delta]$
+
+\begin{proof}
+    Recall third rule in \hyperlink{construction 1.3.11}{construction 1.3.11.}, 
+    \[
+    \inferrule
+    {\Gamma \vdash A \text{ type} \quad \Delta \vdash \gamma^* : \Gamma.A}
+    {\Delta \vdash \gamma^* = (\mathbf{p}\circ \gamma^*).\mathbf{q}[\gamma^*] : \Gamma.A}
+    \]
+    Here, the pre-suppostions of problem is that $\Delta \vdash \gamma : \Gamma$, $\Delta \vdash a : A$, $\Gamma \vdash A \text{ type}$ and $\delta$ be any substitution $\delta : \Lambda \rightarrow \Delta$. 
+    In diagram, 
+    \[
+    \begin{tikzcd}
+        \Delta \arrow[r, "\gamma"] \arrow[rd, "\gamma.a"] & \Gamma \\
+        \Lambda \arrow[u, "\delta"] & \Gamma.A
+    \end{tikzcd}
+    \]
+    (Continue in Next Page . . .)
+\end{proof}
+\end{tcolorbox}
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=brown!75!black,title=Exercise 2.2]
+    For intuition, we can draw following substitution. 
+    \[
+    \begin{tikzcd}
+        \Delta \arrow[r, "\gamma"] \arrow[rd, "\gamma.a"] & \Gamma \\
+        \Lambda \arrow[u, "\delta"] \arrow[r, "(\gamma.a)\circ \delta"', red] & \Gamma.A
+    \end{tikzcd}
+    \]
+    And also, 
+    \[
+    \begin{tikzcd}
+        \Delta \arrow[r, "\gamma"]  & \Gamma \\
+        \Lambda \arrow[u, "\delta"] \arrow[ru, "\gamma \circ \delta", blue] & \Gamma.A
+    \end{tikzcd}
+    \implies 
+    \begin{tikzcd}
+        \Delta \arrow[r, "\gamma"]  & \Gamma \\
+        \Lambda \arrow[u, "\delta"] \arrow[ru, "\gamma \circ \delta", blue] \arrow[r, "(\gamma \circ \delta).?"', blue] & \Gamma.A
+    \end{tikzcd}
+    \]
+    Here our claim is that $?$ part is $a[\delta]$ and $(\gamma.a)\circ \delta = (\gamma \circ \delta).a[\delta]$. 
+    At first, let 
+    \[\gamma^* = (\gamma.a) \circ \delta\]
+    Then $\Lambda \vdash \gamma^* : \Gamma.A$ because 
+    \[
+    \inferrule
+    {\Lambda \vdash \delta : \Delta \quad \Delta \vdash \gamma.a : \Gamma.A}
+    {\Lambda \vdash \underbrace{(\gamma.a) \circ \delta}_{\gamma^*} : \Gamma.A}
+    \]
+    So we can apply \hyperlink{construction 1.3.11}{construction 1.3.11.}
+    \[
+    \inferrule
+    {\Gamma \vdash A \text{ type} \quad \Lambda \vdash (\gamma.a) \circ \delta : \Gamma.A}
+    {\Lambda \vdash (\gamma.a) \circ \delta = \underbrace{(\mathbf{p} \circ ((\gamma.a) \circ \delta)).\mathbf{q}[(\gamma.a)\circ \delta]}_{(*)} : \Gamma.A}
+    \]
+    Here, our claim is that $(*) = (\gamma \circ \delta).a[\delta]$. This is because, 
+    \begin{align*}
+        & (\mathbf{p} \circ ((\gamma.a) \circ \delta)).\mathbf{q}[(\gamma.a)\circ \delta] \\
+        & = ((\mathbf{p} \circ (\gamma.a)) \circ \delta).\mathbf{q}[(\gamma.a)\circ \delta] \\
+        & = (\gamma \circ \delta).\mathbf{q}[(\gamma.a)\circ \delta] \\
+        & = (\gamma \circ \delta).(\mathbf{q}[\gamma.a][\delta]) \\
+        & = (\gamma \circ \delta).a[\delta]
+    \end{align*}
+    This is end of proof. 
+\end{tcolorbox}
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=brown!75!black,title=Exercise 2.3]
+    Given $\Delta \vdash \gamma : \Gamma$ and $\Gamma \vdash A \text{ type}$, construct $\gamma.A$ such that 
+    $\Delta.A[\gamma] \vdash \gamma.A : \Gamma.A$. 
+    \begin{proof}
+        Actually, this is also very clear notion. Let's see following diagram. 
+        \[
+        \begin{tikzcd}
+            \Delta \arrow[r, "\gamma"] & \Gamma \\
+            \Delta.A[\gamma] \arrow[u, "p_\Delta"] & \Gamma.A
+        \end{tikzcd}
+        \]
+        This implies that 
+        \[
+        \begin{tikzcd}
+            \Delta \arrow[r, "\gamma"] & \Gamma \\
+            \Delta.A[\gamma] \arrow[u, "p_\Delta"] \arrow[ru, "\gamma \circ p_\Delta", red] & \Gamma.A
+        \end{tikzcd}
+        \]
+        And our intuition for $\gamma.A$ is that 
+        \[
+        \begin{tikzcd}
+            \Delta \arrow[r, "\gamma"] & \Gamma \\
+            \Delta.A[\gamma] \arrow[r, "\gamma.A", "(\gamma \circ p_\Delta).?"', blue] \arrow[u, "p_\Delta"] \arrow[ru, "\gamma \circ p_\Delta", red] & \Gamma.A
+        \end{tikzcd}
+        \]
+        We can apply \hyperlink{subst extend}{substitution extend rule} here. 
+        \[
+        \inferrule
+        {\Delta.A[\gamma] \vdash \gamma \circ \mathbf{p}_\Delta : \Gamma \quad \Gamma \vdash A \text{ type} \quad \Delta.A[\gamma] \vdash \mathbf{q} : A[\gamma][\mathbf{p}_\Delta] = A[\gamma \circ \mathbf{p}_\Delta]}
+        {\Delta.A[\gamma] \vdash (\gamma \circ \mathbf{p}_\Delta).\mathbf{q} : \Gamma.A}
+        \]
+        Actually, this is our construction for $\gamma.A$. 
+        \[\gamma.A := (\gamma \circ \mathbf{p}).\mathbf{q}, \quad \gamma.A : \Delta.A[\gamma] \rightarrow \Gamma.A\]
+    \end{proof}
+\end{tcolorbox}
+
+\newpage 
+
+\chapter{Internalizing Judgemental Structure : $\Pi, \Sigma, \text{Eq}, \text{Unit}$}
 
 \newpage  
 .
