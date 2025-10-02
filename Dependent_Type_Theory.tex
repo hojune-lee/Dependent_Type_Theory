@@ -711,7 +711,7 @@ Show that $(\gamma.a) \circ \delta = (\gamma \circ \delta).a[\delta]$
     This is end of proof. 
 \end{tcolorbox}
 
-\begin{tcolorbox}[colback=yellow!10!white,colframe=brown!75!black,title=Exercise 2.3]
+\begin{tcolorbox}[colback=yellow!10!white,colframe=brown!75!black,title=Exercise 2.3]\hypertarget{gamma.A}{}
     Given $\Delta \vdash \gamma : \Gamma$ and $\Gamma \vdash A \text{ type}$, construct $\gamma.A$ such that 
     $\Delta.A[\gamma] \vdash \gamma.A : \Gamma.A$. 
     \begin{proof}
@@ -750,6 +750,95 @@ Show that $(\gamma.a) \circ \delta = (\gamma \circ \delta).a[\delta]$
 \newpage 
 
 \chapter{Internalizing Judgemental Structure : $\Pi, \Sigma, \text{Eq}, \text{Unit}$}
+
+\section{Basic Intuitions}\hypertarget{intuition-2.1.}{}
+
+We noted that Dependent Type Theory is similar with First Order Logic. In first order logic, 
+there exists notion of assignment $s$ in Interpretation $\mathfrak{A} = \left<|\mathfrak{A}|, I\right>$ and 
+variants of assignments. Both are corresponds into context $\Gamma$ and substitution $\gamma$ in chapter 1. 
+And then, what's the remaining things? Since dependent type is similar with FOL formulas, 
+we need to construct intuition of correspondings between them. First, FOL terms are corresponds with \lq terms' in our system. 
+Second, predicates are corresponds with \lq type(dependent type)' in our system. These are all what we talk about in previous chapter. 
+Remain things are connectives, quantifiers, true and false. (And one specific predicate, equality judgement.) 
+They are corresponds w.r.t. non-dependent connectives, dependent sum($\exists$), dependent product($\forall$), Unit and Void. 
+\\
+
+I'll try to make more clear between those similarity, in each section. Before that, let's claim the slogan for (any) these 
+connective or quantifier constructors. 
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=red!75!black,title=Slogan]\hypertarget{slogan}{}
+
+Any such connectives or quantifiers in our system is given by claiming followings : 
+
+\begin{enumerate}
+    \item Natural Type-forming Operation
+    \item Natural Isomorphism Relating that Type's terms to judgementally-determined structure. 
+\end{enumerate}
+
+\end{tcolorbox}
+
+First one means that for each newly introduced types in this chapter, there are 
+explicit and meta-level clear construct operation for such type. i.e. We must have the recipe of type. \\
+Second one means that, if we collect all terms that have types that introduced here, then the set must have 
+isomorphism (meta-level meaning) with external (meta-level) structure. 
+
+\section{Dependent Sums}
+
+First of all, let's make clear all the \hyperlink{intuition-2.1.}{intuitions} for dependent sum. 
+\begin{enumerate}
+    \item The type former of dependent sum is $\Sigma$. We'll define soon. 
+    \item Dependent sum's judgementally-determined structure is \lq dependent pair'. 
+    \item Dependent sum is similar to $\exists$. 
+\end{enumerate}
+
+What is dependent pair? Imagine following \lq type' in dependent type system. 
+\[(n : Nat,\text{  } \text{Vec } A\text{ }n)\]
+Actually, this is not matched with our construction of De Bruijn index. Matched version is that 
+\[(Nat, \text{  } \text{Vec } A\text{ }\mathbf{q})\]
+Then imagin the Curry-Howard corresponds here. The term of above type is like \lq one' specific example of above pair, for example
+\[(2, [a, a'])\]
+We can understand that this is proof for 
+\[(\exists n : Nat)(\text{Vec }A\text{ n})\]
+In this intuition, we say that dependent sum is similar to $\exists$. From now on, 
+let's construct above intuitions explicitly by defining operations, isomorphisms, and rules. 
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 2.2.1. Natural Type Formal]
+\[\Sigma_{\Gamma} : \left(\biguplus_{A \in Ty(\Gamma)}Ty(\Gamma.A)\right) \rightarrow Ty(\Gamma)\]
+\end{tcolorbox}
+
+The domain space's meaning is (1) choose valid type $A$ in $\Gamma$ context and (2) Under previous choose, choose valid type in $\Gamma.A$. 
+Then the codomain space's meaning is that, by this $\Sigma_{\Gamma}$ operator, such pair become valid type in $\Gamma$. Then 
+where is \lq Natural' ? It's intuitive meaning is that, we can feel free to choose context $\Gamma$ here. i.e. freely substitute and then change context, the 
+operator's working does not changed. We can write above natural mapping as following inference rules. 
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 2.2.1. Natural Type Formal ( inference rule ver. )]
+\begin{mathpar}
+\inferrule
+{\Gamma \vdash A \text{ type} \quad \Gamma.A \vdash B \text{ type}}
+{\Gamma \vdash \Sigma(A, B) \text{ type}}
+\and   
+\inferrule
+{\Delta \vdash \gamma : \Gamma \quad \Gamma \vdash A \text{ type} \quad \Gamma.A \vdash B \text{ type}}
+{\Delta \vdash \Sigma(A,B)[\gamma] = \Sigma(A[\gamma], B[\gamma.A]) \text{ type}}
+\end{mathpar}    
+\end{tcolorbox}
+
+For the second rule, it can be not clear that why $B[\gamma.A]$ introduced. Let's draw the diagram. 
+See \hyperlink{gamma.A}{this construction for $\gamma.A$}
+\[
+\begin{tikzcd}[column sep=huge, row sep=large]
+    \Delta \arrow[r, "\gamma"] & \Gamma   \\
+    \Delta.A[\gamma] \arrow[r, "\gamma.A"', red] & \Gamma.A
+\end{tikzcd}
+\]
+
+We can pull-back $A$ form $\Gamma$ to $\Delta$ through $\gamma$. And note that $B$ is type in the $\Gamma.A$. So if we pulling back this into $\Delta.A[\gamma]$, 
+using $\gamma.A$. So, the pull-backed type is $B[\gamma.A]$ in $\Delta.A[\gamma]$. It means that 
+\[\Delta \vdash A[\gamma] \text{ type}, \quad \Delta.A[\gamma] \vdash B[\gamma.A] \text{ type}\]
+Then the type-formal implies that 
+\[\Delta \vdash \Sigma(A[\gamma], B[\gamma.A]) \text{ type}\]
+And naturality means that, this type works same with $\Sigma(A, B)$ in $\Gamma$. So construct identity with 
+it's pull-backed version $\Sigma(A, B)[\gamma]$ and above. 
 
 \newpage  
 .
