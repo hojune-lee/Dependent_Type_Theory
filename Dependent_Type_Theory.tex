@@ -839,6 +839,176 @@ Then the type-formal implies that
 \[\Delta \vdash \Sigma(A[\gamma], B[\gamma.A]) \text{ type}\]
 And naturality means that, this type works same with $\Sigma(A, B)$ in $\Gamma$. So construct identity with 
 it's pull-backed version $\Sigma(A, B)[\gamma]$ and above. 
+\\
+
+Then here, how can we define the isomorphism between \lq terms' that have $\Sigma(A,B)$ types and such meta-level notion of \lq pair'? See 
+
+\[\iota_{\Gamma, A, B} : \text{Tm}(\Gamma, \Sigma(A,B)) \longrightarrow \biguplus_{a \in \text{Tm}(\Gamma, A)}\text{Tm}(\Gamma, B[\mathbf{id}.a])\]
+\\
+Note that this is isomorphism on the \lq terms'. Right-hand side contain all dependent pairs (meta-level representation) and 
+our goal is match our new type $\Sigma$ into that notion. This setting is just done at abstraction level. Now 
+our interests are (1) How can we unfold above isomorphism explicitly, using inference rules? 
+(2) Can we define $\iota_{\Gamma, A, B}, \iota_{\Gamma, A, B}^{-1}$ and round-trip among them 
+preserves structures? (3) Do such constructions have naturality? \\
+
+These are remain works in this chapter. 
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=brown!75!black,title=Exercise 2.16.]
+Construct non-dependent pair type, with dependent sum $\Sigma$. 
+
+\begin{proof}
+    TODO
+\end{proof}
+
+\end{tcolorbox}
+
+Now let's construct above isomorphisms explicitly. 
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 2.2.2.]
+This is explicit un-packing of $\iota_{\Gamma, A, B}$ 
+\[
+\inferrule
+{ \Gamma \vdash A \text{ type} \quad \Gamma.A \vdash B \text{ type} \quad \Gamma \vdash p : \Sigma(A, B)}
+{ \Gamma \vdash \mathbf{fst}(p) : A}
+\]
+\[
+\inferrule
+{ \Gamma \vdash A \text{ type} \quad \Gamma.A \vdash B \text{ type} \quad \Gamma \vdash p : \Sigma(A, B)}
+{ \Gamma \vdash \mathbf{snd}(p) : B[\mathbf{id.fst}(p)]}
+\]
+\end{tcolorbox}
+
+Second construction is very genious. It gives us very good intuition. When $\Gamma \vdash p : \Sigma(A, B)$ is given, 
+we can take first element $a$ of $p$ easily. And then, when we meet $\mathbf{q}$ in type $B$, 
+automatically understand that it is $a$ we taken. By this we can write 
+\[(2, [a_1, a_2]) : \Sigma(Nat, \mathbf{Vec} \text{ A }\mathbf{q})\]
+Actually above type generally represents following intuitive type without variable names. 
+\[(n\text{ : Nat}, \mathbf{Vec }\text{ A }\mathbf{n})\] 
+\\
+Then now, it's time to clarify the inverse isomorphism $\iota_{\Gamma, A, B}^{-1}$. Intuitive meaning of this isomorphism is that, 
+connect each meta-level dependent pair terms into our type system. 
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 2.2.3.]
+
+\[\iota_{\Gamma, A, B}^{-1} : \uplus_{a \in \text{Tm}(\Gamma, A)} \text{Tm}(\Gamma, B[\textbf{id}.a]) \longrightarrow \text{Tm}(\Gamma, \Sigma(A, B))\]
+
+\[
+\inferrule
+{
+    \Gamma \vdash a : A \quad \Gamma.A \vdash B \text{ type} \quad \Gamma \vdash b : B[\textbf{id}.a]
+}
+{
+    \Gamma \vdash \textbf{pair}(a, b) : \Sigma(A, B)
+}
+\]
+
+\end{tcolorbox}
+I want to write some understanding for this construction. I think that most important one is 
+that $b$ is absolutely term of $\Gamma$. So, we can't use exact term $a$ via $\mathbf{q}$ when express $b$. 
+However, term $a$ is used when express type of $b$, without writing $a$ directly. This is very very similar with 
+$\exists$ quantifier. Imagine that we have set of premises $\Gamma$. Let's interpret above inference rule. 
+\begin{enumerate}
+    \item Under premises $\Gamma$, we have proof of $A$ via $a$. 
+    \item Under premises $\Gamma$ with $A$, claim $B$. 
+    \item Under premises $\Gamma$, $b$ is proof of $B[\mathbf{id}.a]$. 
+\end{enumerate}
+These three Curry-Howard statements give us intuition about the result of inference rule. 
+\begin{enumerate}
+    \item There exists proof $a$ of $A$. By using this, we can prove $B[\textbf{id}.a]$ via $b$. 
+    \item $\iff$ $(\exists x).(B[\textbf{id}.x])$ satisfiable. 
+\end{enumerate}
+Now second job is that claiming these two isomorphisms are symmetric. It means that 
+the correspondings between our type system and meta-level dependent pair is bijective. Actually 
+proving is done by constructing $\beta$-rule and $\eta$-rule. To show bijective, we just show that round-trip between 
+terms and meta-pairs always preserve original element. Formally, we want to make 
+\[\iota_{\Gamma, A, B} \circ \iota_{\Gamma, A, B}^{-1} = \textbf{id}_{\textbf{meta}}, \quad \iota_{\Gamma, A, B}^{-1} \circ \iota_{\Gamma, A, B} = \textbf{id}_{\textbf{term}}\]
+\\
+This is guaranteed explicitly via following rules. 
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 2.2.4.]
+\[
+\inferrule
+{
+    \Gamma \vdash A \text{ type} \quad \Gamma.A \vdash B \text{ type} \quad \Gamma \vdash p : \Sigma(A, B)
+}
+{
+    \Gamma \vdash \textbf{pair}(\textbf{fst}(p), \textbf{snd}(p)) = p : \Sigma(A, B)
+}
+\qquad \text{($\beta$-rule)}
+\]
+\begin{mathpar}
+\inferrule
+{
+    \Gamma \vdash a : A \quad \Gamma.A \vdash B \text{ type} \quad \Gamma \vdash b : B[\textbf{id}.a]
+}
+{
+    \Gamma \vdash \textbf{fst}(\textbf{pair}(a, b)) = a : A
+}
+\qquad \text{($\eta$-rule)}
+\and   
+\inferrule
+{
+    \Gamma \vdash a : A \quad \Gamma.A \vdash B \text{ type} \quad \Gamma \vdash b : B[\textbf{id}.a]
+}
+{
+    \Gamma \vdash \textbf{snd}(\textbf{pair}(a, b)) = b : B[\textbf{id}.a]
+}
+\qquad \text{($\eta$-rule)}
+\end{mathpar}
+\end{tcolorbox}
+Recap our ultimate goal. The last job is clarify that this isomorphism has naturality. \lq Naturality' means that 
+we can freely use substitutions when apply this rule, or more easily, for all contexts, these pair structure is preserved. 
+For this sake, we can make formal construction by rule also. 
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 2.2.5.]
+\[
+\inferrule
+{
+    \Delta \vdash \gamma : \Gamma \quad \Gamma \vdash a : A \quad \Gamma.A \vdash B \text{ type} \quad \Gamma \vdash b : B[\textbf{id}.a]
+}
+{
+    \Delta \vdash \textbf{pair}(a, b)[\gamma] = \textbf{pair}(a[\gamma], b[\gamma]) : \Sigma(A, B)[\gamma]
+}
+\]
+\end{tcolorbox}
+This is very intuitive. When we make $\textbf{pair}(a, b)$ toy in $\Gamma$, we have 2 ways to take that toy into $\Delta$ via $\gamma$. 
+First way is that take the toy directly ($\textbf{pair}(a,b)[\gamma]$) and second way is that 
+take two materials ($a[\gamma], b[\gamma]$) and make in $\Delta$ (then, $\textbf{pair}(a[\gamma], b[\gamma])$). This rule say that 
+both are same. This is intuitive meaning of naturality. However, this is just naturality of $\iota_{\Gamma, A, B}^{-1}$. 
+We need to show naturality of $\iota_{\Gamma, A, B}$ also. But this is derivable. 
+\begin{align*}
+    \textbf{fst}(p[\gamma]) &= \textbf{fst}(\textbf{pair}(\textbf{fst}(p), \textbf{snd}(p))[\gamma]) \\
+    &= \textbf{fst}(\textbf{pair}(\textbf{fst}(p)[\gamma], \textbf{snd}(p)[\gamma])) \\
+    &= \textbf{fst}(p)[\gamma]
+\end{align*}
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=brown!75!black,title=Exercise 2.17.]
+Show that well-typedness of $b[\gamma]$ in Construction 2.2.5. 
+
+\begin{proof}
+    Our goal is showing that $\Delta \vdash b[\gamma] : B[\gamma.A][\textbf{id}.a[\gamma]]$(And this is well-formed type in $\Delta$ also). This is from 
+    pattern-matching with Construction 2.2.3. 
+    See following diagram first. 
+    \[
+    \begin{tikzcd}[column sep=huge]
+        \Delta \arrow[r, "\gamma", blue] \arrow[d, "{id.a[\gamma]}"', red] \arrow[rd, "{\gamma.a[\gamma]}", purple] & \Gamma \arrow[d, "id.a"] \\
+        \Delta.A[\gamma] \arrow[r, "\gamma.A", red] & \Gamma.A
+    \end{tikzcd}
+    \]
+    Then see how can we take $B$ from $\Gamma.A$ to $\Delta$ and $b$ from $\Gamma$ to $\Delta$. 
+    $B$ is pull-backed through red way and $b$ is pull-backed through blue way. So 
+    $b[\gamma]$ is well-formed term in $\Delta$. And similary, $B[\gamma.A][\textbf{id}.a[\gamma]]$ is well-formed type in $\Delta$. 
+    Last, we must show that $b[\gamma]$ has such type. Since we know that $\Gamma \vdash b : B[\textbf{id}.a]$, 
+    it is clear that $\Delta \vdash b[\gamma] : B[\textbf{id}.a][\gamma]$. Then we can complete proof via showing 
+    $\Delta \vdash B[\gamma.A][\textbf{id}.a[\gamma]] = B[\textbf{id}.a][\gamma] \text{ type}$. This holds because 
+    \begin{align*}
+        [\gamma.A][\textbf{id}.a[\gamma]] &= \gamma.A \circ (\textbf{id}.a[\gamma]) \\
+        &= \gamma.a[\gamma] \qquad \text{$\because$ purple arrow above} \\
+        &= (\textbf{id}.a) \circ \gamma \\
+        &= [\textbf{id}.a][\gamma]
+    \end{align*}
+\end{proof}
+\end{tcolorbox}
 
 \newpage  
 .
