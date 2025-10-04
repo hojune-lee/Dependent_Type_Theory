@@ -843,7 +843,7 @@ it's pull-backed version $\Sigma(A, B)[\gamma]$ and above.
 
 Then here, how can we define the isomorphism between \lq terms' that have $\Sigma(A,B)$ types and such meta-level notion of \lq pair'? See 
 
-\[\iota_{\Gamma, A, B} : \text{Tm}(\Gamma, \Sigma(A,B)) \longrightarrow \biguplus_{a \in \text{Tm}(\Gamma, A)}\text{Tm}(\Gamma, B[\mathbf{id}.a])\]
+\[\iota_{\Gamma, A, B} : \text{Tm}(\Gamma, \Sigma(A,B)) \xrightarrow{\cong} \biguplus_{a \in \text{Tm}(\Gamma, A)}\text{Tm}(\Gamma, B[\mathbf{id}.a])\]
 \\
 Note that this is isomorphism on the \lq terms'. Right-hand side contain all dependent pairs (meta-level representation) and 
 our goal is match our new type $\Sigma$ into that notion. This setting is just done at abstraction level. Now 
@@ -1007,6 +1007,207 @@ Show that well-typedness of $b[\gamma]$ in Construction 2.2.5.
         &= (\textbf{id}.a) \circ \gamma \\
         &= [\textbf{id}.a][\gamma]
     \end{align*}
+\end{proof}
+\end{tcolorbox}
+
+\newpage 
+
+\section{Dependent Products}
+
+Here also, follow up the constructing of previous chapter. We'll clarify intuition for this type by : 
+\begin{enumerate}
+    \item The type former of dependent product is $\Pi$. We'll define soon. 
+    \item Dependent product's judgementrally-determined structure is \lq dependent function'. 
+    \item Dependent product is similar to $\forall$. 
+\end{enumerate}
+
+Here, what is dependent function? Imagin following type in dependent type system. 
+\[(n : Nat) \longrightarrow \textbf{Vec}\text{ }A \text{ }n\]
+The term of above type works like a function, whose input is natural number $n$ and output is 
+vector with length $n$. So this is very similar with $\forall$. Once we throw any natural number $n$, it returns 
+proof of output type. i.e. this type is similar to claim that
+\[(\forall n : Nat)(\textbf{Vec}\text{ }A\text{ }n)\]
+\\
+Recap the \hyperlink{slogan}{slogan}. When we introduce types here, we'll define (1) Natural Type Former and (2) Natural Isomorphisms between terms and external structure. 
+As we've studied in previous chapter, we can expect what are them. 
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 2.3.1. Natural Type Formal]
+\[\Pi_{\Gamma} : \left(\biguplus_{A \in Ty(\Gamma)} Ty(\Gamma.A)\right) \rightarrow Ty(\Gamma)\]
+\end{tcolorbox}
+And then, we can construct explicit rules for make this operator as same previous. 
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 2.3.2.]
+
+\begin{mathpar}
+\inferrule
+{
+    \Gamma \vdash A \text{ type} \quad \Gamma.A \vdash B \text{ type}
+}
+{
+    \Gamma \vdash \Pi(A, B)\text{ type}
+}
+\and   
+\inferrule 
+{
+    \Delta \vdash \gamma : \Gamma \quad \Gamma \vdash A \text{ type} \quad \Gamma.A \vdash B \text{ type}
+}
+{
+    \Delta \vdash \Pi(A, B)[\gamma] = \Pi(A[\gamma], B[\gamma.A]) \text{ type}
+}
+\end{mathpar}
+
+\end{tcolorbox}
+
+This is our \lq type former' for dependent product. Actually for understanding type forming, 
+it isn't difficult since we deal samely in previous chapter. Now our goal is that, find and define 
+natural isomorphisms between \lq terms' that have $\Pi(A, B)$ type and meta-level notion of \lq dependent function'. 
+Imagine that following two sets are isomorphic. 
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 2.3.3. Natural Isomorphism of Terms]
+
+\[Tm(\Gamma, \Pi(A, B)) \quad \cong \quad Tm(\Gamma.A, B)\]
+And divide each isomorphism via 
+\[\iota_{\Gamma, A \rightarrow B} : Tm(\Gamma, \Pi(A, B)) \xrightarrow{\cong} Tm(\Gamma.A, B)\]
+\[\iota_{\Gamma, A \rightarrow B}^{-1} : Tm(\Gamma.A, B) \xrightarrow{\cong} Tm(\Gamma, \Pi(A, B))\]
+
+\end{tcolorbox}
+
+Now, let's do same construction with previous chapter. (1) How can we unfold above isomorphism explicitly, using inference rules? 
+(2) Can we define $\iota_{\Gamma, A\rightarrow B}, \iota_{\Gamma, A\rightarrow B}^{-1}$ and 
+round-trip among them presereves structures? (3) Do such constructions have naturality? 
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 2.3.4.]
+Let's unpack $\iota_{\Gamma, A\rightarrow B}$
+\begin{mathpar}
+\inferrule
+{
+    \Gamma \vdash a : A \quad \Gamma.A \vdash B \text{ type} \quad \Gamma \vdash f : \Pi(A, B)
+}
+{
+    \Gamma \vdash \textbf{app}(f, a) : B[\textbf{id}.a]
+}
+\end{mathpar}
+Let's unpack $\iota_{\Gamma, A\rightarrow B}^{-1}$
+\[
+\inferrule
+{
+    \Gamma \vdash A \text{ type} \quad \Gamma.A \vdash b : B
+}
+{
+    \Gamma \vdash \lambda(b) : \Pi(A, B)
+}
+\]
+
+\end{tcolorbox}
+
+Both are very intuitive. First one is application of function, and second one is lambda-definition of function without variable name. 
+However, I want to note some slight difference between dependent sum and above. 
+One difference is that, place that $b$ exists. At dependent sum, $b$ exists in $\Gamma$ context. 
+So we explain that we can't use $\mathbf{q}$ for express $a$ in $b$. However, at above, $b$ is term of $\Gamma.A$ world. So 
+we can use $\mathbf{q}$ for represent $b$. This is one of major difference. Further, by this, we can 
+agree our abstractical notion for matching of $\forall$ and $\Pi$. We can always take proof $b$ of $B$ under premises $\Gamma$ appended with $A$ by substitution $\textbf{id}.a$ for all $a$. 
+It gives us that, with any proof $x$ of $A$, $B[\textbf{id}.x]$ is true. Formally, existance term of type $\Pi(A, B)$ is proof of
+\[(\forall x).(B[\textbf{id}.x])\]
+
+The next job is that claiming these two isomorphisms are symmetric. Similar to previous chapter, we need to define 
+\[\iota_{\Gamma, A\rightarrow B}\circ \iota_{\Gamma, A\rightarrow B}^{-1} = \textbf{id}_{meta}, \quad \iota_{\Gamma, A\rightarrow B}^{-1} \circ \iota_{\Gamma, A\rightarrow B} = \textbf{id}_{term}\]
+\\
+This is guaranteed explicitly via following rules. 
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 2.3.5.]
+\[
+\inferrule
+{
+    \Gamma \vdash A \text{ type} \quad \Gamma.A \vdash B \text{ type} \quad \Gamma \vdash f : \Pi(A, B)
+}
+{
+    \Gamma \vdash \lambda(\textbf{app}(f[\mathbf{p}], \mathbf{q})) = f : \Pi(A, B)
+}
+\qquad \text{($\beta$-rule)}
+\]
+\[
+\inferrule
+{
+    \Gamma \vdash a : A \quad \Gamma.A \vdash b : B
+}
+{
+    \Gamma \vdash \textbf{app}(\lambda(b), a) = b[\textbf{id}.a] : B[\textbf{id}.a]
+}
+\qquad \text{($\eta$-rule)}
+\]
+\end{tcolorbox}
+
+Our final goal is state that this isomorphism has naturality. This can be holded by make following rules explicitly. 
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 2.3.6.]
+\[
+\inferrule
+{
+    \Delta \vdash \gamma : \Gamma \quad \Gamma \vdash A \text{ type} \quad \Gamma.A \vdash B \text{ type}
+}
+{
+    \Delta \vdash \Pi(A, B)[\gamma] = \Pi(A[\gamma], B[\gamma.A]) \text{ type}
+}
+\]
+\[
+\inferrule
+{
+    \Delta \vdash \gamma : \Gamma \quad \Gamma \vdash A \text{ type} \quad \Gamma.A \vdash b : B
+}
+{
+    \Delta \vdash \lambda(b)[\gamma] = \lambda(b[\gamma.A]) : \Pi(A, B)[\gamma]
+}
+\]
+\[
+\inferrule
+{
+    \Delta \vdash \gamma : \Gamma \quad \Gamma \vdash a : A \quad \Gamma.A \vdash B \text{ type} \quad \Gamma \vdash f : \Pi(A, B) 
+}
+{
+    \Delta \vdash \textbf{app}(f, a)[\gamma] = \textbf{app}(f[\gamma], a[\gamma]) : B[\gamma.a[\gamma]]
+}
+\]
+\end{tcolorbox}
+
+\begin{tcolorbox}[breakable, colback=yellow!10!white,colframe=brown!75!black,title=Exercise 2.6.]
+At Construction 2.3.6. prove that $\textbf{app}(f, a)[\gamma]$ and $\textbf{app}(f[\gamma], a[\gamma])$ have the type $B[\gamma.a[\gamma]]$. 
+
+\begin{proof}
+    Let's drow diagram, 
+    \[
+    \begin{tikzcd}[column sep = huge]
+        \Delta \arrow[r, "\gamma"] \arrow[rd, "{\gamma.a[\gamma]}"] \arrow[d, "{id.a[\gamma]}"'] & \Gamma \arrow[d, "id.a"] \\
+        \Delta.A[\gamma] \arrow[r, "\gamma.A"] & \Gamma.A
+    \end{tikzcd}
+    \]
+    We can take $a$ form $\Gamma$ to $\Delta$, type $B$ from $\Gamma.A$ to $\Delta.A[\gamma]$, and take $f$ from $\Gamma$ to $\Delta$. It gives us 
+    \[\Delta \vdash a[\gamma] : A[\gamma] \quad \Delta.A[\gamma] \vdash B[\gamma.A] \text{ type} \quad \Delta \vdash f[\gamma] : \Pi(A, B)[\gamma]\]
+    Then by Construction 2.3.4. we can get 
+    \[\Delta \vdash \textbf{app}(f[\gamma], a[\gamma]) : B[\gamma.A][\textbf{id}.a]\]
+    However, we know that $B[\gamma.A][\textbf{id}.a] = B[\gamma.a[\gamma]]$, so 
+    \[\Delta \vdash \textbf{app}(f[\gamma], a[\gamma]) : B[\gamma.a[\gamma]]\]
+    And first one is easier, we can take $\textbf{app}(f, a) : B[\textbf{id}.a]$ from $\Gamma$ into $\Delta$. 
+    \[\Delta \vdash \textbf{app}(f, a)[\gamma] : B[\textbf{id}.a][\gamma] = B[(\textbf{id}\circ \gamma).a[\gamma]] = B[\gamma.a[\gamma]]\]
+\end{proof}
+
+\end{tcolorbox}
+
+\begin{tcolorbox}[breakable, colback=yellow!10!white,colframe=brown!75!black,title=Exercise 2.7.]
+At Construction 2.3.5. prove that $\lambda(\textbf{app}(f[\mathbf{p}], \mathbf{q}))$ is well-formed term of $\Pi(A, B)$ in $\Gamma$. 
+\begin{proof}
+    Our goal is showing 
+    \[\Gamma \vdash \lambda(\textbf{app}(f[\textbf{p}], \textbf{q})) : \Pi(A, B)\]
+    To this is valid, we need 2 premises 
+    \[\Gamma \vdash A \text{ type}, \qquad \Gamma.A \vdash \textbf{app}(f[\textbf{p}], \textbf{q}) : B\]
+    First one is premised, so let's prove second one. Since $f$ is term of $\Gamma$, so take it to $\Gamma.A$ then $f[\textbf{p}]$. So, 
+    we know that 
+    \[\Gamma.A \vdash f[\textbf{p}] : \Pi(A, B)[\textbf{p}], \quad \Gamma.A \vdash \textbf{q} : A[\textbf{p}], \qquad \Gamma.A.A[\textbf{p}] \vdash B[\textbf{p}.A] \text{ type}\]
+    Then with Construction 2.3.4. we can get 
+    \[\Gamma.A \vdash \textbf{app}(f[\textbf{p}], \textbf{q}) : B[\textbf{p}.A][\textbf{id.q}]\]
+    Then remain thing to show is 
+    \[\Gamma.A \vdash B = B[\textbf{p}.A][\textbf{id.q}] \text{ type}\]
+    Actually, this is intuitive. $\textbf{p}.A$ is weakening from $\Gamma.A$ into $\Gamma.A.A[\textbf{p}]$. So it is just 
+    send $B$ in $\Gamma.A$ to $\Gamma.A.A[\textbf{p}]$ and take it again through $\textbf{id.q}$. Formal writing is that, 
+    \[B[\textbf{p}.A][\textbf{id.q}] = B[\textbf{p}.A \circ \textbf{id.q}] = B[(\textbf{p}\circ \textbf{id}).\textbf{q}] = B[\textbf{p.q}] = B\]
+    This is end of proof. 
 \end{proof}
 \end{tcolorbox}
 
