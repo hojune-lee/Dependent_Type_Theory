@@ -1232,8 +1232,183 @@ It is quite un-expectable. Because in our intuition, forward isomorphism's range
 If we follow that, our $\mathbf{app}$ maybe $\Gamma.A \vdash \mathbf{app}^*(f[\mathbf{p}], \mathbf{q})$. 
 This is also valid construction of elimination rule for $\Pi$-type. And also this is intuitively understandable, 
 however this form of definition of application is not familiar to us. Most of time, we imagine 
-application via $f(a), \mathbf{f}(a)$ this form. 
+application via $f(a), \mathbf{f}(a)$ this form. This is reason why we use above form of $\mathbf{app}$ definition. 
+When we move from context $\Gamma$ to $\Gamma.A$, we always give $\Gamma \vdash a : A$, and $\mathbf{app}^*$ automatically 
+has the intension that we'll use such ghost $a$. For convenience, our intension introducing here is that, externally 
+mension such $a$ we use. Then pull-back $\mathbf{app}^*(f[\mathbf{p}], \mathbf{q})$ into $\Gamma$ by $\mathbf{id}.a$, 
+we can get above form of $\mathbf{app}$ definition. 
 
 \newpage  
+
+\section{Extensional Equality}
+
+Actually, the constructing for here is very simple and similar to previous sections. However, there are many 
+remarkable stuffs about what \lq equality' means. Because we already use a kind of equality many times. Recap 
+\[
+\inferrule
+{
+    \Gamma \vdash A \text{ type} \quad \Gamma.A \vdash B \text{ type} \quad \Gamma \vdash p : \Sigma(A, B)
+}
+{
+    \Gamma \vdash \mathbf{pair}(\mathbf{fst}(p), \mathbf{snd}(p)) = p : \Sigma(A, B)
+}
+\]
+\\
+Here we already used \lq =' symbol which means equality. This kind of equality is called definitional equality. 
+This equality is part of constructing definition of pair. (Especially, $\eta$-rule for define validity of $\iota^{-1}_{\Gamma, A, B}$) 
+One good example to understand this is that, 
+
+\begin{lstlisting}[language=Caml, caption={Add in Peano Arithmetic}, label={lst:ocaml}]
+    let rec Add(n : Nat, m : Nat) = 
+        match (n, m) with 
+        | (n, 0) -> n 
+        | (n, succ m') -> Succ(Add(n, m'))
+\end{lstlisting}
+\vspace{4mm}
+In this case, $Add(n, 0)$ and $n$ are definitionally equal. Similarly, $Add(n, 2)$ and $Succ(Succ(n))$ also definitionally equal. 
+However, what about $Add(n, m)$ and $Add(m, n)$? We(meta-level) know that they are equal, but we need some proof. 
+It does not follows directly from definition. Such \lq provable' equality is called propositional equality. (or called extensional equality) 
+Main target of this section is bring those equality between terms into our type system. Recap the Curry-Howard corresponding, 
+we'll bring such \lq provable proposition' as a $\mathbf{Eq}$ type in our system, and if there is a term $p$ 
+of type $\mathbf{Eq}$ exists, then it is proof for such proposition. Let's get started. 
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 2.4.1. Natural Type Formal]
+\[\mathbf{Eq}_\Gamma : \left(\biguplus_{A \in Ty(\Gamma)} Tm(\Gamma, A) \times Tm(\Gamma, A) \right) \rightarrow Ty(\Gamma)\]
+\end{tcolorbox}
+\vspace{4mm}
+The un-packed version of above intuition is that, 
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 2.4.2.]\hypertarget{const 2.4.2.}{}
+\begin{mathpar}
+\inferrule
+{
+    \Gamma \vdash a, b : A 
+}
+{
+    \Gamma \vdash \mathbf{Eq}(A, a, b) \text{ type}
+}
+\and  
+\inferrule 
+{
+    \Delta \vdash \gamma : \Gamma \quad \Gamma \vdash a, b : A
+}
+{
+    \Delta \vdash \mathbf{Eq}(A, a, b)[\gamma] = \mathbf{Eq}(A[\gamma], a[\gamma], b[\gamma]) \text{ type}
+}
+\end{mathpar}
+\end{tcolorbox}
+\vspace{4mm}
+Thanks for the previous works, it is not hard to understand. This is our natural type formal $\mathbf{Eq}$. However something is quite different for defining natural isomorphisms. 
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 2.4.3.]\hypertarget{const 2.4.3.}{}
+\[Tm(\Gamma, \mathbf{Eq}(A, a, b)) \cong \mathbb{E}_{a \equiv b} := \begin{cases}
+    \{*\} & a \equiv b \\
+    \emptyset & a \not\equiv b
+\end{cases}\]
+And divide each isomorphism via 
+\[\iota_{\Gamma, A, a \equiv b} : Tm(\Gamma, \mathbf{Eq}(A, a, b)) \xrightarrow{\cong} \mathbb{E}_{a\equiv b}\]
+\[\iota_{\Gamma, A, a \equiv b}^{-1} : \mathbb{E}_{a \equiv b} \xrightarrow{\cong} Tm(\Gamma, \mathbf{Eq}(A, a, b))\]
+\end{tcolorbox}
+\vspace{4mm}
+This isomorphic target is $\mathbb{E}_{a\equiv b}$, quite unclear now. Here, I wrote $\equiv$ symbol to mean propositional equality. 
+We can interpret above isomorphism in natural language, by \lq If two terms $a, b$ of type $A$ in $\Gamma$ are propositionally equal, 
+then there exists a unique proof (term) for such propositional equality $\mathbf{Eq}(A, a, b)$ and if not, 
+there aren't any proof (term) for that.' Then now let's unpack above isomorphisms explicitly. 
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 2.4.4.]\hypertarget{const 2.4.4.}{}
+Unpacking $\iota_{\Gamma, A, a\equiv b}$ : 
+\begin{mathpar}
+\inferrule
+{
+    \Gamma \vdash a, b : A \quad \Gamma \vdash p : \mathbf{Eq}(A, a, b) 
+}
+{
+    \Gamma \vdash a = b : A 
+}
+\and  
+\inferrule
+{
+    \Gamma \vdash a, b : A \quad \Gamma \vdash p : \mathbf{Eq}(A, a, b)
+}
+{
+    \Gamma \vdash \mathbf{refl} = p : \mathbf{Eq}(A, a, b)
+}
+\end{mathpar}
+\vspace{4mm}
+Unpacking $\iota_{\Gamma, A, a\equiv b}^{-1}$ : 
+\[
+\inferrule
+{
+    \Gamma \vdash a : A 
+}
+{
+    \Gamma \vdash \mathbf{refl} : \mathbf{Eq}(A, a, a)
+}
+\]
+\end{tcolorbox}
+
+\vspace{4mm}
+
+First rule implies that, if there exists proof of equality, we can use that as definitional equality, i.e. rewrite anywhere, anytime. 
+And second rule implies that such proof is unique. These two rules cosntruct forward isomorphism. However, 
+third rule is kind of unique term-generator. Note that all of basic definition equalities are included here. 
+We can understand this rule as visualization of $a$-quotient in meta-space. Our textbook write down the power of this type : 
+(1) If there exists a proof for $a \equiv b$, i.e. $\Gamma \vdash p : \mathbf{Eq}(A, a, b)$ then we can always, anywhere rewrite $a$ to $b$ and $b$ to $a$. 
+(2) Proof $p$ can be a variable. Imagine the context $\Gamma.\mathbf{Eq}(A, a, b)$. \\
+However, this is dangerous since pull propositional equality into definitional equality. This is main feature of extensional type system. However, 
+it can break the decidablity of type-checker. 
+
+\newpage 
+
+\section{Unit Type}
+
+This is the last, and the most simple type in chapter 2. Intuitive meaning of this type is \textbf{true} in logic. 
+Imagine some functions in OCaml, which have type $\mathbf{Unit} \rightarrow ..$ 
+We can always excute this function without any input ( premises ) , so the functionality of unit type is 
+true in logic. Since the constructions are simple, I'll write down without detailed explaining. 
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 2.5.1.]\hypertarget{const 2.5.1.}{}
+\[\mathbf{Unit}_\Gamma \in Ty(\Gamma)\]
+\[Tm(\Gamma, \mathbf{Unit}) \cong \{*\}\]
+\end{tcolorbox}
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 2.5.2.]\hypertarget{const 2.5.2.}{}
+\begin{mathpar}
+\inferrule
+{
+    \vdash \Gamma \text{ cx}
+}
+{
+    \Gamma \vdash \mathbf{Unit} \text{ type}
+}
+\and  
+\inferrule 
+{
+    \Delta \vdash \gamma : \Gamma   
+}
+{
+    \Delta \vdash \mathbf{Unit}[\gamma] = \mathbf{Unit} \text{ type}
+}
+\end{mathpar}
+\begin{mathpar}
+\inferrule
+{
+    \vdash \Gamma \text{ cx}
+}
+{
+    \Gamma \vdash \mathbf{tt} : \mathbf{Unit}
+}
+\and  
+\inferrule
+{
+    \Gamma \vdash a : \mathbf{Unit}
+}
+{
+    \Gamma \vdash a = \mathbf{tt} : \mathbf{Unit}
+}
+\end{mathpar}
+\end{tcolorbox}
+\newpage 
+\chapter{Inductive Types \\ : Void, Bool, +, Nat}
+\newpage 
 .
 \end{document}
