@@ -392,6 +392,7 @@ INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmr17.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
 INPUT /usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map
+INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmsl12.tfm
 INPUT ./Dependent_Type_Theory.toc
 INPUT ./Dependent_Type_Theory.toc
 INPUT Dependent_Type_Theory.toc
@@ -429,7 +430,6 @@ INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbx6.tfm
 OUTPUT Dependent_Type_Theory.toc
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmr17.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmsl12.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmti12.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmmi12.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmmi12.tfm

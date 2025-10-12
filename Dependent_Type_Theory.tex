@@ -275,7 +275,7 @@ pdfauthor={Hojune Lee},
     
         \vspace{1cm}
         \large
-        About Extensional Type Systems
+        Summary note of Angiuli \& Gratzer's Dependent Type Theory.
         \vspace{3cm}
         
         \LARGE
@@ -287,6 +287,10 @@ pdfauthor={Hojune Lee},
         \textbf{School of Computing, KAIST}\\  
     \end{center}
 \end{titlepage}
+
+This is my summary note of KAIST CS520 Graduated PL course of 2025 Fall.
+Instructor is Prof. Hongseok Yang, and all the materials are based on 
+textbook by Angiuli \& Gratzer's Dependent Type Theory. 
 
 \hypersetup{linkcolor=black}
 \tableofcontents
@@ -624,7 +628,7 @@ $q$ in $\Gamma.A$, it has type $A[\mathbf{p}]$ in $\Gamma.A$. We define $\gamma$
 Actually its answer is $\mathbf{q}[\gamma]$. It has type $A[\mathbf{p}][\gamma] = A[\mathbf{p} \circ \gamma]$ in $\Delta$. 
 So to make same substitution with $\gamma$, we must append $\mathbf{q}[\gamma]$ at $\mathbf{p}\circ \gamma$. This intuition gives us $\gamma = (\mathbf{p}\circ \gamma).\mathbf{q}[\gamma]$ in $\Delta$. 
 
-\begin{tcolorbox}[colback=yellow!10!white,colframe=brown!75!black,title=Exercise 2.1]
+\begin{tcolorbox}[colback=yellow!10!white,colframe=brown!75!black,title=Exercise 2.1]\hypertarget{Exer 2.1.}{}
 
 Prove that if $\Gamma \vdash \gamma : \Gamma.A$, then $\mathbf{p} \circ \gamma = \textbf{id}$
 \begin{proof}
@@ -1409,6 +1413,392 @@ true in logic. Since the constructions are simple, I'll write down without detai
 \end{tcolorbox}
 \newpage 
 \chapter{Inductive Types \\ : Void, Bool, +, Nat}
+
+\section{Basic Intuitions}
+
+Inductive types are types defined via induction principles. Our previous discussion is \lq For given context $\Gamma$, let's define natural type $\Upsilon$. 
+It's structure is similar to some external meta-level structure. i.e. $Tm(\Gamma, \Upsilon) \cong ...$' 
+Our textbook introduce this kind of term constructing as \lq hard coded' type formers. 
+However, in this chapter, our discussion is entirely changed as \lq First, let's define type former $\Upsilon$. 
+Second, assume that our interesting context already has such type by $\Gamma.\Upsilon$. 
+Third, in such context $\Gamma.\Upsilon$, what's going on terms of well-defined type $A$ in $\Gamma.\Upsilon$?' 
+This flow is sufficiently seemed like inductive definitions. Although we get such kind of intuitions, 
+it can be still not familiar for us that defining types and connecting them with its natural meta-level structures via $Tm(\Gamma.\Upsilon, A) \cong ...$
+So, textbook also gives us some set-theorical intuitions. I'll introduce such thing in this chapter first. 
+
+Suppose that $A, B$ are sets. Can you define the Cartesian product $A \times B$ of $A, B$? 
+The answer might be $A \times B := \{(a, b) | a \in A , b \in B\}$. Correct, however there are alternative way to defining $A \times B$. Actually it is characterize of set $A \times B$. 
+We now define $A \times B$ via \textbf{for any set $X$, if any $f : X \rightarrow A \times B$ is given, 
+then $f_1 : X \rightarrow A$ and $f_2 : X \rightarrow B$ are also determined and vice versa.} 
+Here, the symbol $A \times B$ such that holds above bold \textbf{charactiristic} is definition of Cartesian product of $A, B$. 
+( More rigorously, such isomorphic quotients are $A \times B$. )
+
+Another example is characterize of single-ton set $\mathbf{1}$. One way for definition is construct isomorphic quotient 
+$\mathbf{1} \cong \{*\}$. However it can be characterize by following way : \textbf{For any set $X$, there are only one function $X \rightarrow \mathbf{1}$. i.e. $\forall X, |Hom(X, \mathbf{1})| = 1$}
+All these kind of construction is what we did in previous chapter. Look similarity between 
+\[Hom(X, \mathbf{1}) \cong Tm(\Gamma, \mathbf{Unit})\]
+
+Now let's define emptyset $\emptyset$ like this kind of construction. One turns out that, the most elegant characterization of $\emptyset$ is 
+\textbf{For any set $X$, there are only one function $\emptyset \rightarrow X$}. This is story about, 
+why we put our target in left blank. 
+
+\newpage 
+
+\section{Void : The empty type}
+
+Poetically, \textbf{Void} type's role is \textbf{false} in first order logic, and \textbf{emptyset} in set theory. 
+When we prove something in first order logic, if we reach $ I \models \bot$ under assuming $I \models \Gamma$, 
+then we say that $\Gamma$ is false, or $I \not\models \Gamma$. Very similar role is done by \textbf{Void}. 
+If we reach well-defined term $\Gamma \vdash b : \mathbf{Void}$, then it is proof that our context $\Gamma$ is wrong. i.e. Un-reachable context. 
+Means that, \textbf{Void} type works like false proposition. 
+
+Then now, the construction of type former is not difficult. It is same as \textbf{Unit} in previous chapter. 
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 3.2.1. Natural Type Formal]\hypertarget{const 3.2.1.}{}
+
+\[\mathbf{Void}_\Gamma \in Ty(\Gamma)\]
+
+\end{tcolorbox}
+\vspace{2mm}
+And also, easily unpack this meta-level representation into our type system by explicit rules. 
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 3.2.2.]\hypertarget{const 3.2.2.}{}
+\begin{mathpar}
+\inferrule
+{
+    \vdash \Gamma \text{ cx}
+}
+{
+    \Gamma \vdash \mathbf{Void} \text{ type}
+}
+\and
+\inferrule
+{
+    \Delta \vdash \gamma : \Gamma
+}
+{
+    \Delta \vdash \mathbf{Void}[\gamma] = \mathbf{Void} \text{ type}
+}
+\end{mathpar}
+\end{tcolorbox}
+\vspace{4mm}
+
+Defining natural type formal is similar to previous. If we are living in Chapter 2, the basic next step will be 
+trying to construct following isomorphism : 
+\[Tm(\Gamma, \mathbf{Void}) \cong \emptyset \qquad \text{$\Leftarrow$ (This is Wrong !!!)}\]
+\\
+If we append this isomorphism into our system, it will be rejected. This isomorphism doesn't agree with us
+because 2 major reasons, First is that even wrong context $\Gamma$ also couldn't have \textbf{Void} type term. 
+Second one is that, our already existing rules generate \textbf{Void} type terms, so the isomorphism between emptyset will be broken. 
+The broken cases are following : $\mathbf{q} \in Tm(\Gamma.\mathbf{Void}, \mathbf{Void})$, and $\mathbf{app}(\mathbf{q}, \mathbf{tt}) \in Tm(\Gamma.\Pi(\mathbf{Unit}, \mathbf{Void}), \mathbf{Void})$. 
+By those reasons, setting above isomorphism is disgusting. 
+
+Then it's time to think like previous intuition section. \textbf{If Void type is existing our context already, then 
+it can have terms for that type!! Moreover, in such context, Everything is Wrong !!} So does not try to construct as 
+\lq \textbf{Void} is type characterized by, for any context $\Gamma$, no terms... Uh! It broke everything!' and 
+try to \lq \textbf{Void} is type characterized by, if our context have \textbf{Void} already, then everything is false!' 
+So let's imagine following isomorphism : 
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 3.2.3. Natural Term Isomorphism]\hypertarget{const 3.2.3.}{}
+\[\rho_{\Gamma, A} : Tm(\Gamma.\mathbf{Void}, A) \cong \{*\}\] 
+\end{tcolorbox}
+
+This isomorphism has interesting meanings, first one is that if our context contains \textbf{Void}, 
+then for every type $A$ and terms of type $A$ is single-ton, which means that \lq false'. 
+Another one is that, recap the isomorphic structure of dependent product type $\Pi$. 
+\[Tm(\Gamma, \Pi(A, B)) \cong Tm(\Gamma.A, B)\]
+\\
+Under this, we can state 
+\[Tm(\Gamma, \Pi(\mathbf{Void}, A)) \cong Tm(\Gamma.\mathbf{Void}, A) \cong \{*\}\]
+\\
+All dependent function that domain type is $\mathbf{Void}$ is single-ton element. 
+Now our goal is that : bring this notion into our type system explicitly via rules. Approach one, 
+bring above isomorphism \lq directly' , means that 
+\begin{mathpar}
+\inferrule
+{
+    \vdash \Gamma \text{ cx} \quad \Gamma.\mathbf{Void} \vdash A \text{ type}
+}
+{
+    \Gamma.\mathbf{Void} \vdash \mathbf{absurd'} : A
+}
+\and  
+\inferrule
+{
+    \vdash \Gamma \text{ cx} \quad \Gamma.A \vdash a : A 
+}
+{
+    \Gamma.\mathbf{Void} \vdash \mathbf{absurd'} = a : A 
+}
+\end{mathpar}
+We bring the isomorphism literally. However, recap what we did when handle \textbf{app} construction, 
+we've liked represent the constructed term in $\Gamma$ context. However, above rules 
+represents the constructed terms are in $\Gamma.\mathbf{Void}$. So, we'll axiomatization that 
+\begin{tikzcd}
+    \Gamma \arrow[r, "id.b"] & \Gamma.\mathbf{Void}
+\end{tikzcd}
+so get $\mathbf{absurd}(b) := \mathbf{absurd'}[\mathbf{id}.b]$ where $\Gamma \vdash b : \mathbf{Void}$
+So we write cut-in version of term (proof for false) construction rules : ( These rules automatically infer the above rules, checking will be proved later as exercise. )
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 3.2.4.]\hypertarget{const 3.2.4.}{}
+\[
+\inferrule
+{
+    \Gamma \vdash b : \mathbf{Void} \quad \Gamma.\mathbf{Void} \vdash A \text{ type}
+}
+{
+    \Gamma \vdash \mathbf{absurd}(b) : A[\mathbf{id}.b]
+}
+\]
+\[
+\inferrule
+{
+    \Delta \vdash \gamma : \Gamma \quad \Gamma \vdash b : \mathbf{Void} \quad \Gamma.\mathbf{Void} \vdash A \text{ type}
+}
+{
+    \Delta \vdash \mathbf{absurd}(b)[\gamma] = \mathbf{absurd}(b[\gamma]) : A[\gamma.b[\gamma]]
+}
+\]
+\[
+\inferrule
+{
+    \Gamma \vdash b : \mathbf{Void} \quad \Gamma.\mathbf{Void} \vdash a : A 
+}
+{
+    \Gamma \vdash \mathbf{absurd}(b) = a[\mathbf{id}.b] : A[\mathbf{id}.b]
+}
+\]
+\end{tcolorbox}
+\vspace{4mm}
+Understanding above is not difficult. Note that the meaning \lq inductive' is well-expressed in here. 
+We used type \textbf{Void} for premise of term constructor. So it is called inductive type. 
+First rule tells us that, if we have a proof of false, then if we assume this as premise, then 
+everything can be derived. Just the symbol \textbf{absurd}$(b)$ is proof of \lq every statements is false when we assume $b$'. 
+Second one gives naturality for the term constructor. Third rule guarantees the single-toness of proof of $A$ in $\Gamma.\mathbf{Void}$. 
+
+Now, with Exercises we'll make stronger understanding. 
+
+\begin{tcolorbox}[breakable, colback=yellow!10!white,colframe=brown!75!black,title=Exercise 3.2.5.]\hypertarget{const 3.2.5.}{}
+Show that if $\Gamma \vdash b_0, b_1 : \mathbf{Void}$ then $\Gamma \vdash b_0 = b_1 : \mathbf{Void}$. 
+\begin{proof}
+    
+First, we can get 
+\[
+\inferrule
+{
+    \Gamma.\mathbf{Void} \vdash \mathbf{p} : \Gamma \quad \Gamma \vdash b_0, b_1 : \mathbf{Void}
+}
+{
+    \Gamma.\mathbf{Void} \vdash b_0[\mathbf{p}], b_1[\mathbf{p}] : \underbrace{\mathbf{Void}[\mathbf{p}]}_{ = \mathbf{Void}}
+}
+\]
+Then, $\eta$-rule in \hyperlink{const 3.2.4.}{const 3.2.4.} implies that 
+\[
+\inferrule
+{
+    \Gamma \vdash b_0, b_1 : \mathbf{Void} \quad \Gamma.\mathbf{Void} \vdash b_0[\mathbf{p}], b_1[\mathbf{p}] : \mathbf{Void}
+}
+{
+    \Gamma \vdash \mathbf{absurd}(b_0) = b_0[\mathbf{p}][\mathbf{id}.b_0] : \mathbf{Void}[\mathbf{id}.b_0] \\
+    \Gamma \vdash \mathbf{absurd}(b_0) = b_1[\mathbf{p}][\mathbf{id}.b_0] : \mathbf{Void}[\mathbf{id}.b_0] \\
+    \Gamma \vdash \mathbf{absurd}(b_1) = b_0[\mathbf{p}][\mathbf{id}.b_1] : \mathbf{Void}[\mathbf{id}.b_1] \\
+    \Gamma \vdash \mathbf{absurd}(b_1) = b_1[\mathbf{p}][\mathbf{id}.b_1] : \mathbf{Void}[\mathbf{id}.b_1]
+}
+\]
+However, \hyperlink{Exer 2.1.}{Exer 2.1.} implies that $\Gamma \vdash \mathbf{p} \circ (\mathbf{id}.b_0) = \mathbf{p} \circ (\mathbf{id}.b_1) = \mathbf{id}$, 
+and since $\Gamma \vdash \mathbf{Void}[\mathbf{id}.b_0] = \mathbf{Void}[\mathbf{id}.b_1] = \mathbf{Void}$
+We can get 
+\[
+\Gamma \vdash \mathbf{absurd}(b_0) = b_0 = \mathbf{absurd}(b_1) = b_1 : \mathbf{Void}
+\]
+This implies that 
+\[\Gamma \vdash b_0 = b_1 : \mathbf{Void}\]
+So, this intuitively gives us that $\mathbf{Void}$ term is always single-ton if it exists. 
+\end{proof}
+\end{tcolorbox}
+
+\begin{tcolorbox}[breakable, colback=yellow!10!white,colframe=brown!75!black,title=Exercise 3.2.6.]\hypertarget{const 3.2.6.}{}
+Fixing $\Delta \vdash \gamma : \Gamma$, prove that there is at most one substitution $\Delta \vdash \overline{\gamma} : \Gamma.\mathbf{Void}$ such that satisfying $\mathbf{p} \circ \overline{\gamma} = \gamma$. 
+\begin{proof}
+I'll draw diagram for good understanding. 
+\[
+\begin{tikzcd}
+    \Delta \arrow[r, "\gamma"] \arrow[rd, "\overline{\gamma}"']& \Gamma \arrow[d, "?"', shift right]
+    \\ & \Gamma.\mathbf{Void} \arrow[u, "p"', shift right]
+\end{tikzcd}
+\]
+We'll use following rule for substitution : 
+\[
+\inferrule
+{
+    \Gamma \vdash A \text{ type} \quad \Delta \vdash \gamma : \Gamma.A 
+}
+{
+    \Delta \vdash \gamma = (\mathbf{p} \circ \gamma).\mathbf{q}[\gamma] : \Gamma.A
+}
+\tag{*}
+\]
+Suppose that $\overline{\gamma}_i, i = 1, 2$ such that $\Delta \vdash \overline{\gamma_i} : \Gamma.\mathbf{Void}, i = 1,2$ and $(\mathbf{p} \circ \overline{\gamma}_i) = \gamma, i = 1, 2$ exists. 
+Then we can apply (*) by 
+\[
+\inferrule
+{
+    \Gamma \vdash \mathbf{Void} \text{ type} \quad \Delta \vdash \overline{\gamma}_i : \Gamma.\mathbf{Void}
+}
+{
+    \Delta \vdash \overline{\gamma}_i = (\mathbf{p} \circ \overline{\gamma}_i).\mathbf{q}[\overline{\gamma}_i] : \Gamma.\mathbf{Void}
+}
+\]
+By assumption, we can directly rewrite above result by 
+\[\Delta \vdash \overline{\gamma}_i = \gamma.\mathbf{q}[\overline{\gamma}_i] : \Gamma.\mathbf{Void}\tag{**}\]
+\\
+However, $\Gamma.\mathbf{Void} \vdash \mathbf{q} : \mathbf{Void}$. So, we can pull-back $\mathbf{q}$ through $\overline{\gamma}_i$. 
+\[
+\inferrule
+{
+    \Delta \vdash \overline{\gamma}_i : \Gamma.\mathbf{Void} \quad \Gamma.\mathbf{Void} \vdash \mathbf{q} : \mathbf{Void}
+}
+{
+    \Delta \vdash \mathbf{q}[\overline{\gamma}_i] : \mathbf{Void}[\overline{\gamma}_i] = \mathbf{Void}
+}
+\]
+However, the result of Exercise 2.23. implies that, 
+\[\Delta \vdash \mathbf{q}[\overline{\gamma}_1] = \mathbf{q}[\overline{\gamma}_2] : \mathbf{Void}\]
+\\
+We can use this result for (**). 
+\[\Delta \vdash \overline{\gamma}_1 = \gamma.\mathbf{q}[\overline{\gamma}_1] = \gamma.\mathbf{q}[\overline{\gamma}_2] = \overline{\gamma}_2 : \Gamma.\mathbf{Void}\]
+This implies that, 
+\[\Delta \vdash \overline{\gamma}_1 = \overline{\gamma}_2 : \Gamma.\mathbf{Void}\]
+We proved that, if such $\overline{\gamma}$ exists, then it is unique. This is sufficient to prove that 
+there is at most one such $\overline{\gamma}$. 
+
+\end{proof}
+\end{tcolorbox}
+
+\begin{tcolorbox}[breakable, colback=yellow!10!white,colframe=brown!75!black,title=Exercise 3.2.7.]\hypertarget{const 3.2.7.}{}
+Let $\Gamma.\mathbf{Void} \vdash A \text{ type}$ and $\Gamma \vdash a : A[\mathbf{id}.b]$. Show that 
+$\Gamma.\mathbf{Void} \vdash A[(\mathbf{id}.b) \circ \mathbf{p}] = A \text{ type}$, and therefore that $\Gamma.\mathbf{Void} \vdash a[\mathbf{p}] : A$. 
+
+\begin{proof}
+    
+We'll use following previous result. 
+\[(\gamma.a) \circ \delta = (\gamma \circ \delta).a[\delta]\]
+\\
+In this exercies, we can write as 
+\[(\mathbf{id}.b) \circ \mathbf{p} = (\mathbf{id} \circ \mathbf{p}).b[\mathbf{p}]\]
+\\
+However, by property of $\mathbf{id}$, 
+\[(\mathbf{id}.b) \circ \mathbf{p} = (\mathbf{id} \circ \mathbf{p}).b[\mathbf{p}] = \mathbf{p}.b[\mathbf{p}]\tag{*}\]
+However, our problem gives some pre-supposition : 
+\[\Gamma \vdash A[\mathbf{id}.b] \text{ type}\]
+Which means that 
+\[\Gamma \vdash \mathbf{id}.b : \Gamma.\mathbf{Void}\]
+This also gives pre-supposition : 
+\[\Gamma \vdash b : \mathbf{Void}\]
+So we can pull-back such $b$ through $\mathbf{p}$ : 
+\[\Gamma.\mathbf{Void} \vdash b[\mathbf{p}] : \mathbf{Void}[\mathbf{p}] = \mathbf{Void}\]
+However, $\Gamma.\mathbf{Void} \vdash \mathbf{q} : \mathbf{Void}$ and Exercise 2.23. implies that 
+\[\Gamma.\mathbf{Void} \vdash b[\mathbf{p}] = \mathbf{q} : \mathbf{Void}\]
+Then we can rewrite (*) by 
+\[\]\[(\mathbf{id}.b) \circ \mathbf{p} = (\mathbf{id} \circ \mathbf{p}).b[\mathbf{p}] = \mathbf{p}.b[\mathbf{p}] = \mathbf{p}.\mathbf{q} = \mathbf{id}\]
+in context $\Gamma.\mathbf{Void}$. So we can prove our original claim, 
+\[\Gamma.\mathbf{Void} \vdash A[(\mathbf{id}.b) \circ \mathbf{p}] = A[\mathbf{id}] = A \text{ type}\]
+Then the remaining part is easy. Since $\Gamma \vdash a : A[\mathbf{id}.b]$, we can pull-back $a$ into $\Gamma.\mathbf{Void}$ through $p$ : 
+\[\Gamma.\mathbf{Void} \vdash a[\mathbf{p}] : A[\mathbf{id}.b][\mathbf{p}] = A[(\mathbf{id}.b)\circ \mathbf{p}] = A\]
+\end{proof}
+\end{tcolorbox}
+
+\begin{tcolorbox}[breakable, colback=yellow!10!white,colframe=brown!75!black,title=Exercise 3.2.8.]\hypertarget{const 3.2.8.}{}
+Derive the following rule, using the previous exercise and the $\eta$-rule. 
+\[
+\inferrule
+{
+    \Gamma \vdash b : \mathbf{Void} \quad \Gamma.\mathbf{Void} \vdash A \text{ type} \quad \Gamma \vdash a : A[\mathbf{id}.b]
+}
+{
+    \Gamma \vdash a = \mathbf{absurd}(b) : A[\mathbf{id}.b]
+}
+\]
+
+\begin{proof}
+
+We'll use above Exercise 2.25. as lemma. We proved that 
+\[
+\inferrule
+{
+    \Gamma \vdash b : \mathbf{Void} \quad  \Gamma.\mathbf{Void} \vdash A \quad \text{ type} \quad \Gamma \vdash a : A[\mathbf{id}.b]
+}
+{
+    \Gamma.\mathbf{Void} \vdash a[\mathbf{p}] : A
+}
+\tag{*}
+\]
+And the original $\eta$-rule is that 
+\[
+\inferrule
+{
+    \Gamma \vdash b : \mathbf{Void} \quad \Gamma.\mathbf{Void} \vdash a : A 
+}
+{
+    \Gamma \vdash \mathbf{absurd}(b) = a[\mathbf{id}.b] : A[\mathbf{id}.b]
+}
+\]
+To apply this, let's write that 
+\[
+\inferrule
+{
+    \Gamma \vdash b : \mathbf{Void} \quad \Gamma.\mathbf{Void} \vdash a[\mathbf{p}] : A 
+}
+{
+    \Gamma \vdash \mathbf{absurd}(b) = a[\mathbf{p}][\mathbf{id}.b] : A[\mathbf{id}.b]
+}
+\]
+Since (*) gives the premises, we get 
+\[\Gamma \vdash \mathbf{absurd}(b) = a[\mathbf{p}][\mathbf{id}.b] : A[\mathbf{id}.b]\]
+However, $a[\mathbf{p}][\mathbf{id}.b] = a[\mathbf{p}\circ (\mathbf{id}.b)] = a[\mathbf{id}] = a$, we can get 
+\[\Gamma \vdash  \mathbf{absurd}(b) = a : A[\mathbf{id}.b]\]
+This is End of Proof. 
+\end{proof}
+\end{tcolorbox}
+
+\begin{tcolorbox}[breakable, colback=yellow!10!white,colframe=brown!75!black,title=Exercise 3.2.9.]\hypertarget{const 3.2.9.}{}
+We have included the rule $\Delta \vdash \mathbf{absurd}(b)[\gamma] = \mathbf{absurd}(b[\gamma]) : A[\gamma.b[\gamma]]$ but 
+it is in fact derivable using the $\eta$-rule. Prove this. 
+
+\begin{proof}
+Our assumptions here is that : $\Delta \vdash \gamma : \Gamma$ , $\Gamma \vdash b : \mathbf{Void}$, $\Gamma.\mathbf{Void} \vdash A \text{ type}$.
+Let's draw the diagram first. 
+
+\[\begin{tikzcd}[row sep = huge, column sep = huge]
+    \Delta  \arrow[r, "\gamma"] & \Gamma   \\
+    \Delta.\mathbf{Void} \arrow[r, red, "\gamma.\mathbf{Void}"] & \Gamma.\mathbf{Void} \arrow[u, "p"]
+\end{tikzcd}\]
+
+Then, since $\Gamma \vdash b : \mathbf{Void}$, we can pull-back into $\Delta$ : 
+\[\Delta \vdash b[\gamma] : \mathbf{Void}\]
+and since we've defined that $\Gamma \vdash \mathbf{absurd}(b) : A[\mathbf{id}.b]$, we can pull-back this into $\Gamma.\mathbf{Void}$ and again into $\Delta.\mathbf{Void}$ 
+through given substitutions : 
+\[
+\Delta.\mathbf{Void} \vdash \mathbf{absurd}(b)[\mathbf{p}][\gamma.\mathbf{Void}] : A[\gamma.\mathbf{Void}]
+\]
+Now we can use that $\eta$-rule. 
+\[
+\inferrule
+{
+    \Delta \vdash b[\gamma] : \mathbf{Void} \quad \Delta.\mathbf{Void} \vdash \mathbf{absurd}(b)[\mathbf{p}][\gamma.\mathbf{Void}] : A[\gamma.\mathbf{Void}]
+}
+{
+    \Delta \vdash \mathbf{absurd}(b[\gamma]) = \mathbf{absurd}(b)[\mathbf{p}][\gamma.\mathbf{Void}][\mathbf{id}.b[\gamma]] : A[\gamma.\mathbf{Void}][\mathbf{id}.b[\gamma]]
+}
+\tag{*}
+\]
+However here, 
+\[\mathbf{p} \circ \gamma.\mathbf{Void} \circ (\mathbf{id}.b[\gamma]) = \mathbf{p} \circ \gamma.b[\gamma] = \gamma\]
+and 
+\[\gamma.\mathbf{Void} \circ \mathbf{id}.b[\gamma] = \gamma.b[\gamma] \]
+We can clean up the result of (*) as : 
+\[\Delta \vdash \mathbf{absurd}(b[\gamma]) = \mathbf{absurd}(b)[\gamma] : A[\gamma.b[\gamma]]\]
+This is end of proof. 
+\end{proof}
+\end{tcolorbox}
 \newpage 
 .
 \end{document}
