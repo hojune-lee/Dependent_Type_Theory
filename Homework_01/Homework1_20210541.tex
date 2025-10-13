@@ -825,30 +825,45 @@ How can we use above intuition? Let's see. The original $\eta$-rule was
 {\Gamma.\mathbf{Bool} \vdash A \text{ type} \quad \Gamma.\mathbf{Bool} \vdash a : A \quad \Gamma \vdash b : \mathbf{Bool} }
 { \Gamma \vdash \mathbf{if}(a[\mathbf{id.true}], a[\mathbf{id.false}], b) = a[\mathbf{id}.b] : A[\mathbf{id}.b]}
 \]
-
-We'll apply this rule by following pattern : 
-
+\\
+To prove the $\eta$-rule for $\mathbf{if'}$ of us, we'll use that 
 \[
 \inferrule
 {
-    \Gamma.\mathbf{Bool.Bool} \vdash A[\mathbf{p}.\mathbf{Bool}] \text{ type} \quad \Gamma.\mathbf{Bool.Bool} \vdash a[\mathbf{p}.\mathbf{Bool}] : A[\mathbf{p}.\mathbf{Bool}] \quad \Gamma.\mathbf{Bool} \vdash \mathbf{q} : \mathbf{Bool}
+    \Delta \vdash \gamma : \Gamma \quad \Gamma.\mathbf{Bool} : A \text{ type} \quad \Gamma \vdash a_t : A[\mathbf{id}.\mathbf{true}] \quad \Gamma \vdash a_f : A[\mathbf{id}.\mathbf{false}]
 }
 {
-    \Gamma.\mathbf{Bool} \vdash \mathbf{if}(a[\mathbf{p.Bool}][\mathbf{id.true}], a[\mathbf{p.Bool}][\mathbf{id.false}], \mathbf{q}) = a[\mathbf{p.Bool}][\mathbf{id.q}] : A[\mathbf{p.Bool}][\mathbf{id.q}]
+    \Delta.\mathbf{Bool} \vdash \mathbf{if}'(a_t, a_f)[\gamma.\mathbf{Bool}] = \mathbf{if}'(a_t[\gamma], a_f[\gamma]) : A[\gamma.\mathbf{Bool}]
 }
 \]
 \\
-We can rewrite using $\mathbf{p.Bool} \circ \mathbf{id.q} = \mathbf{id}$, the result of above as : 
+We can write this as 
 \[
-\Gamma.\mathbf{Bool} \vdash \mathbf{if}(a[\mathbf{p.Bool}][\mathbf{id.true}], a[\mathbf{p.Bool}][\mathbf{id.false}], \mathbf{q}) = a : A
+\inferrule
+{
+    \Gamma.\mathbf{Bool} \vdash \mathbf{p} : \Gamma \quad \Gamma.\mathbf{Bool} \vdash a : A \quad \Gamma \vdash a[\mathbf{id.true}] : A[\mathbf{id.true}] \quad \Gamma \vdash a[\mathbf{id.false}] : A[\mathbf{id.false}]
+}
+{
+    \Gamma.\mathbf{Bool}.\mathbf{Bool} \vdash \mathbf{if'}(a[\mathbf{id.true}], a[\mathbf{id.false}])[\mathbf{p.Bool}] = \mathbf{if'}(a[\mathbf{id.true}][\mathbf{p}], a[\mathbf{id.false}][\mathbf{p}]) : A[\mathbf{p.Bool}]
+}
 \]
-However, this is 
+We can pull-back the result using $\Gamma.\mathbf{Bool} \vdash \mathbf{q} : \mathbf{Bool}$. 
+\[\Gamma.\mathbf{Bool} \vdash \mathbf{if'}(a[\mathbf{id.true}], a[\mathbf{id.false}])[\mathbf{p.Bool}][\mathbf{id.q}] \] \[= \mathbf{if'}(a[\mathbf{id.true}][\mathbf{p}], a[\mathbf{id.false}][\mathbf{p}])[\mathbf{id.q}] : A[\mathbf{p.Bool}][\mathbf{id.q}]\]
+\\
+Rewrite this as 
 \[
-    \Gamma.\mathbf{Bool} \vdash \mathbf{if}'(a[\mathbf{id}.\mathbf{true}], a[\mathbf{id}.\mathbf{false}]) = a : A
+\Gamma.\mathbf{Bool} \vdash \mathbf{if'}(a[\mathbf{id.true}], a[\mathbf{id.false}]) = \mathbf{if}(a[\mathbf{id.true}][\mathbf{p}], a[\mathbf{id.false}][\mathbf{p}], \mathbf{q}) : A 
 \]
 \\
-This is End of Proof. 
-
+However, we already know that $\mathbf{id.true} \circ \mathbf{p} = \mathbf{p}.A \circ \mathbf{id.true'}$ where $\mathbf{id.true}$ is arrow $\Gamma.\mathbf{Bool} \rightarrow \Gamma.\mathbf{Bool.Bool}$. Then ,  
+\[
+\Gamma.\mathbf{Bool} \vdash \mathbf{if'}(a[\mathbf{id.true}], a[\mathbf{id.false}]) = \mathbf{if}(a[\mathbf{p}.A][\mathbf{id.true'}], a[\mathbf{p}.A][\mathbf{id.false'}], \mathbf{q}) : A 
+\]
+However, the $\eta$-rule of given $\mathbf{if}$ on $\Gamma.\mathbf{Bool}$ context implies that 
+\[\mathbf{if'}(a[\mathbf{id.true}], a[\mathbf{id.false}]) = \mathbf{if}(a[\mathbf{p}.A][\mathbf{id.true'}], a[\mathbf{p}.A][\mathbf{id.false'}], \mathbf{q}) = a[\mathbf{p.A}][\mathbf{id.q}] : A\]
+Then finally, we can holds 
+\[\Gamma.\mathbf{Bool} \vdash \mathbf{if'}(a[\mathbf{id.true}], a[\mathbf{id.false}]) = a : A\]
+This is proof of $\eta$-rule for $\mathbf{if'}$. 
 \end{proof}
 
 \newpage .
