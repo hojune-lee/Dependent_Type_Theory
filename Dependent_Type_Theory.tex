@@ -1799,6 +1799,311 @@ We can clean up the result of (*) as :
 This is end of proof. 
 \end{proof}
 \end{tcolorbox}
+
+Here, I can construct further realize about this type. As programmer's perspective, 
+we can't reach $\Gamma.\mathbf{Void}$ context during the run-time. So one function of \textbf{Void} is that, 
+represent the unreachable branch (or pattern matching). The another one is, representing negation. 
+For $\neg A$, we can construct type $A \rightarrow \mathbf{Void}$. This means that, 
+if we have both term of $A$ type and $A \rightarrow \mathbf{Void}$, then such context is wrong. 
+
+\newpage 
+
+\section{Booleans}
+
+Almost type system contains Boolean type, which is characterized by 2 elements : true and false. 
+However, we've already talk about true and false. It was \textbf{Unit} and \textbf{Void} type. 
+Here are somewhat differences between such true, false and boolean's true and false. 
+With \textbf{tt}, we can always prove \lq true' in any context. With $\mathbf{absurd}(-)$, 
+we can prove that current context is wrong. However, \textbf{false} term of type \textbf{Bool} does not means 
+current context is wrong. \textbf{Bool} just give us \lq case analysis tool'. 
+And with this 2-ary case analysis tool, we can generate n-ary case analysis tool. 
+(if, else if, else if, ... , else) With general notion of Boolean type, the basic construction is straight-forward and not difficult. 
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 3.3.1.]\hypertarget{const 3.3.1.}{}
+\begin{mathpar}
+\inferrule
+{ \vdash \Gamma \text{ cx}}
+{
+    \Gamma \vdash \mathbf{Bool} \text{ type}
+}
+\and  
+\inferrule
+{
+    \Delta \vdash \gamma : \Gamma   
+}
+{
+    \Delta \vdash \mathbf{Bool}[\gamma] = \mathbf{Bool} \text{ type}
+}
+\end{mathpar}
+\end{tcolorbox}
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 3.3.2.]\hypertarget{const 3.3.2.}{}
+    \begin{mathpar}
+    \inferrule
+    { \vdash \Gamma \text{ cx}}
+    {
+        \Gamma \vdash \mathbf{true} : \mathbf{Bool}
+    }
+    \and  
+    \inferrule
+    { \vdash \Gamma \text{ cx}}
+    {
+        \Gamma \vdash \mathbf{false} : \mathbf{Bool}
+    }
+    \end{mathpar}
+    \begin{mathpar}
+    \inferrule
+    {
+        \Delta \vdash \gamma : \Gamma   
+    }
+    {
+        \Delta \vdash \mathbf{true} = \mathbf{true}[\gamma] : \mathbf{Bool}
+    }
+    \and  
+    \inferrule
+    {
+        \Delta \vdash \gamma : \Gamma   
+    }
+    {
+        \Delta \vdash \mathbf{false} = \mathbf{false}[\gamma] : \mathbf{Bool}
+    }
+    \end{mathpar}
+\end{tcolorbox}
+
+However, does \textbf{Bool} actually have \lq only' 2 terms? More rigorous question is that, our 
+isomorphism structures can be following? 
+\[Tm(\Gamma, \mathbf{Bool}) \cong \{\star, \star'\} \quad \text{ ( THIS IS WRONG !! ) }\]
+Can you imagine that why this is wrong? If we choice this isomorphism to construct, then every 
+\textbf{Bool} terms in claim context $\Gamma$ must be determined by \textbf{true} or \textbf{false}. 
+i.e. we must always have definitional equality that such claim of \textbf{Bool} type term and one of \textbf{true, false}. 
+However, there are many un-deterministic possible boolean terms. For example, let $b : \mathbf{Bool}$ is true when Riemann Conjecture is true, otherwise false. 
+If we choice above form for isomorphism, we must determine that $b$ is true or false. This is why we define \textbf{Bool} as inductive type. 
+So as \textbf{Void}, we characterize \textbf{Bool} via mapping out property. 
+Suppose following characterize target. 
+\[Tm(\Gamma.\mathbf{Bool}, A) \cong \quad ?\]
+If we have term $a \in Tm(\Gamma.\mathbf{Bool}, A)$, it works like \lq Lazy Evaluation of Boolean value $\mathbf{q}$.'
+With respect to our intension of Boolean, there must be exactly 2 ways to \lq case analysis' or \lq Lazy Evaluate' such $\mathbf{q}$ both in $a$ and $A$. 
+Just that is role of true and false. So our construction scheme now is \lq there are only 2 cases for interpret $\mathbf{q}$ in $Tm(\Gamma.\mathbf{Bool}, A)$. 
+So one pull-back (evaluation) way for $a$ is $\Gamma \vdash a[\mathbf{id.true}] = A[\mathbf{id.true}]$ and another one is that $\Gamma \vdash a[\mathbf{id.false}] : A[\mathbf{id.false}]$. 
+We can represent this scheme via following mathematical construction : 
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=green!75!black,title=Construction 3.3.3.]\hypertarget{const 3.3.3.}{}
+    \[\mathbf{Bool}_\Gamma \in Ty(\Gamma)\]
+    \[\mathbf{true}_\Gamma, \mathbf{false}_\Gamma \in Tm(\Gamma, \mathbf{Bool})\]
+    \[((\mathbf{id.true})^*, (\mathbf{id.false})^*) : Tm(\Gamma.\mathbf{Bool}, A) \cong Tm(\Gamma, A[\mathbf{id.true}]) \times Tm(\Gamma, A[\mathbf{id.false}])\]
+\end{tcolorbox}
+
+This isomorphism structure immediately give us that we have only 2 way to evaluating $\mathbf{q}$ symbols in $Tm(\Gamma.\mathbf{Bool}, A)$ into 
+previous context $\Gamma$. Understanding this story-line is quite important. 
+This also means that, when we consider inductive type's term natural isomorphism, it works like \lq Lazy Evaluation' of symbol $\mathbf{q}$ and so, 
+the way to pull-back (evaluate) it is defined via term-constructors for that inductive type. In this case, there was 2 term-constructor for each context, true and false. 
+
+Now our job is that, unfold such isomorphism structures into our type system explicitly. 
+For the forward map 
+\[\iota : Tm(\Gamma.\mathbf{Bool}, A) \xrightarrow{\cong} Tm(\Gamma, A[\mathbf{id.true}]) \times Tm(\Gamma, A[\mathbf{id.false}])\]
+Actually we do not need anything new. This direction just be written as : 
+\[
+\inferrule
+{
+    \Gamma.\mathbf{Bool} \vdash A \text{ type} \quad \Gamma.\mathbf{Bool} \vdash a : A 
+}
+{
+    \Gamma \vdash a[\mathbf{id.true}] : A[\mathbf{id.true}]
+}
+\quad 
+\text{ and vice versa }
+\]
+This is already derivable with term-constructing rules. Important one is reverse map. 
+\[\iota^{-1} : Tm(\Gamma, A[\mathbf{id.true}]) \times Tm(\Gamma, A[\mathbf{id.false}]) \xrightarrow{\cong} Tm(\Gamma.\mathbf{Bool}, A)\]
+\\
+Here, this has very important intuitive meaning. We'll give 2 terms exists in context $\Gamma$ each type is 
+$A[\mathbf{id.true}]$ and $A[\mathbf{id.false}]$. Then, our target term is in $\Gamma.\mathbf{Bool}$ with 
+lazy-evaluate target $\mathbf{q}$ is also ghostly given from $\Gamma$, if such $\mathbf{q}$ is true then evaluated as first one, 
+if false, then second one. As I wrote above, the main intuition of this direction is \lq dependent if' type. 
+\textbf{ Note that, to agree with our usage of if syntax, we'll built-in cut rule here. This will be explained in Exercise of this section. } 
+
+\begin{tcolorbox}[breakable, colback=yellow!10!white,colframe=green!75!black,title=Construction 3.3.4.]\hypertarget{const 3.3.4.}{}
+\[
+\inferrule
+{
+    \Gamma.\mathbf{Bool} \vdash A \text{ type} \quad \Gamma \vdash a_t : A[\mathbf{id.true}] \quad \Gamma \vdash a_f : A[\mathbf{id.false}] \quad \Gamma \vdash b : \mathbf{Bool}
+}
+{
+    \Gamma \vdash \mathbf{if}(a_t, a_f, b) : A[\mathbf{id}.b]
+}
+\]
+\[
+\inferrule
+{
+    \Delta \vdash \gamma : \Gamma \\
+    \Gamma.\mathbf{Bool} \vdash A \text{ type} \quad \Gamma \vdash a_t : A[\mathbf{id.true}] \quad \Gamma \vdash a_f : A[\mathbf{id.false}] \quad \Gamma \vdash b : \mathbf{Bool}
+}
+{
+    \Delta \vdash \mathbf{if}(a_t, a_f, b)[\gamma] = \mathbf{if}(a_t[\gamma], a_f[\gamma], b[\gamma]) : A[\gamma.b[\gamma]]
+}
+\]   
+\[
+\inferrule
+{
+    \Gamma.\mathbf{Bool} \vdash A \text{ type} \quad \Gamma \vdash a_t : A[\mathbf{id.true}] \quad \Gamma \vdash a_f : A[\mathbf{id.false}]
+}
+{
+    \Gamma \vdash \mathbf{if}(a_t, a_f, \mathbf{true}) = a_t : A[\mathbf{id.true}] \quad \Gamma \vdash \mathbf{if}(a_t, a_f, \mathbf{false}) = a_f : A[\mathbf{id.false}]
+}
+\]
+\[
+\inferrule
+{
+    \Gamma.\mathbf{Bool} \vdash A \text{ type} \quad \Gamma.\mathbf{Bool} \vdash a : A \quad \Gamma \vdash b : \mathbf{Bool} 
+}
+{
+    \Gamma \vdash \mathbf{if}(a[\mathbf{id.true}], a[\mathbf{id.false}], b) = a[\mathbf{id}.b] : A[\mathbf{id}.b]
+}
+\tag{*}
+\]
+We'll see (*) in post section again. 
+\end{tcolorbox}
+
+\begin{tcolorbox}[breakable, colback=yellow!10!white,colframe=brown!75!black,title=Exercise 3.3.5.]\hypertarget{const 3.3.5.}{}
+
+\textbf{Exercise 2.29.} Give rules axiomatizing the boolean analogue of $\mathbf{absurd}'$, and prove 
+that these rules are interderivable with our rules for $\mathbf{if}(a_t, a_f, b)$. 
+
+\begin{proof}
+    
+This is also question about \lq cut-rule applied' version of our backward homomorphism $\iota^{-1}$. 
+Since 
+\[\iota^{-1} : Tm(\Gamma, A[\mathbf{id}.\mathbf{true}]) \times Tm(\Gamma, A[\mathbf{id}.\mathbf{false}]) \rightarrow Tm(\Gamma.\mathbf{Bool}, A) \]
+\\
+Then when we directly construct this homomorphism, it will be 
+\[
+\inferrule
+{
+    \Gamma.\mathbf{Bool} \vdash A \text{ type} \quad \Gamma \vdash a_t : A[\mathbf{id}.\mathbf{true}] \quad \Gamma \vdash a_f : A[\mathbf{id}.\mathbf{false}]
+}
+{
+    \Gamma.\mathbf{Bool} \vdash \mathbf{if}'(a_t, a_f) : A 
+}
+\]
+\\
+With above definition, the remaining modified rules are simply constructed : 
+\[
+\inferrule
+{
+    \Delta \vdash \gamma : \Gamma \quad \Gamma.\mathbf{Bool} : A \text{ type} \quad \Gamma \vdash a_t : A[\mathbf{id}.\mathbf{true}] \quad \Gamma \vdash a_f : A[\mathbf{id}.\mathbf{false}]
+}
+{
+    \Delta.\mathbf{Bool} \vdash \mathbf{if}'(a_t, a_f)[\gamma.\mathbf{Bool}] = \mathbf{if}'(a_t[\gamma], a_f[\gamma]) : A[\gamma.\mathbf{Bool}]
+}
+\]
+\\
+\[
+\inferrule
+{
+    \Gamma.\mathbf{Bool} \vdash A \text{ type} \quad \Gamma \vdash a_t : A[\mathbf{id}.\mathbf{true}] \quad \Gamma \vdash a_f : A[\mathbf{id}.\mathbf{false}]
+}
+{
+    \Gamma \vdash \mathbf{if}'(a_t, a_f)[\mathbf{id}.\mathbf{true}] = a_t : A[\mathbf{id}.\mathbf{true}]
+}
+\]
+\\
+\[
+\inferrule
+{
+    \Gamma.\mathbf{Bool} \vdash A \text{ type} \quad \Gamma \vdash a_t : A[\mathbf{id}.\mathbf{true}] \quad \Gamma \vdash a_f : A[\mathbf{id}.\mathbf{false}]
+}
+{
+    \Gamma \vdash \mathbf{if}'(a_t, a_f)[\mathbf{id}.\mathbf{false}] = a_f : A[\mathbf{id}.\mathbf{false}]
+}
+\]
+\\
+\[
+\inferrule
+{
+    \Gamma.\mathbf{Bool} \vdash A \text{ type} \quad \Gamma.\mathbf{Bool} \vdash a : A
+}
+{
+    \Gamma.\mathbf{Bool} \vdash \mathbf{if}'(a[\mathbf{id}.\mathbf{true}], a[\mathbf{id}.\mathbf{false}]) = a : A}
+\]
+\\
+However, our rules for $\mathbf{if}$ is constructed on context $\Gamma$. Actually, 
+as same we discussed, it can be imagined as pull-backed $\mathbf{if}'$ into $\Gamma$. Here, we can write 
+\[
+\inferrule
+{
+    \Gamma.\mathbf{Bool} \vdash A \text{ type} \quad \Gamma \vdash a_t : A[\mathbf{id}.\mathbf{true}] \quad \Gamma \vdash a_f : A[\mathbf{id}.\mathbf{false}] \quad \Gamma \vdash b : \mathbf{Bool}
+}
+{
+    \Gamma \vdash \mathbf{if}'(a_t, a_f)[\mathbf{id}.b] := \mathbf{if}(a_t, a_f, b) : A[\mathbf{id}.b]
+}
+\]
+\\
+Now, let's prove our original rules for $\mathbf{if}$ implies above $\beta, \eta$-rules. ( Here, I'll omit some premises when they are clear )
+We have 
+\[\Gamma \vdash \mathbf{if}(a_t, a_f, \mathbf{true}) = a_t : A[{\mathbf{id.true}}]\]
+Rewrite this : 
+\[\Gamma \vdash \mathbf{if'}(a_t, a_f)[\mathbf{id.true}] = a_t : A[\mathbf{id.true}]\]
+Similarly, 
+\[\Gamma \vdash \mathbf{if'}(a_t, a_f)[\mathbf{id.false}] = a_f : A[\mathbf{id.false}]\]
+\\
+This directly proves above $\beta$-rules. For $\eta$-rule, we can imagine following diagram : 
+
+\[
+\begin{tikzcd}
+    \Gamma & \Gamma.\mathbf{Bool} \arrow[l, "p"]  \arrow[shift left, r, "id.q"] &  \Gamma.\mathbf{Bool.Bool} \arrow[l, "p.\mathbf{Bool}"]
+\end{tikzcd}
+\]
+
+How can we use above intuition? Let's see. The original $\eta$-rule was 
+\[
+\inferrule
+{\Gamma.\mathbf{Bool} \vdash A \text{ type} \quad \Gamma.\mathbf{Bool} \vdash a : A \quad \Gamma \vdash b : \mathbf{Bool} }
+{ \Gamma \vdash \mathbf{if}(a[\mathbf{id.true}], a[\mathbf{id.false}], b) = a[\mathbf{id}.b] : A[\mathbf{id}.b]}
+\]
+\\
+To prove the $\eta$-rule for $\mathbf{if'}$ of us, we'll use that 
+\[
+\inferrule
+{
+    \Delta \vdash \gamma : \Gamma \quad \Gamma.\mathbf{Bool} : A \text{ type} \quad \Gamma \vdash a_t : A[\mathbf{id}.\mathbf{true}] \quad \Gamma \vdash a_f : A[\mathbf{id}.\mathbf{false}]
+}
+{
+    \Delta.\mathbf{Bool} \vdash \mathbf{if}'(a_t, a_f)[\gamma.\mathbf{Bool}] = \mathbf{if}'(a_t[\gamma], a_f[\gamma]) : A[\gamma.\mathbf{Bool}]
+}
+\]
+\\
+We can write this as 
+\[
+\inferrule
+{
+    \Gamma.\mathbf{Bool} \vdash \mathbf{p} : \Gamma \quad \Gamma.\mathbf{Bool} \vdash a : A \quad \Gamma \vdash a[\mathbf{id.true}] : A[\mathbf{id.true}] \quad \Gamma \vdash a[\mathbf{id.false}] : A[\mathbf{id.false}]
+}
+{
+    \Gamma.\mathbf{Bool}.\mathbf{Bool} \vdash \mathbf{if'}(a[\mathbf{id.true}], a[\mathbf{id.false}])[\mathbf{p.Bool}] = \mathbf{if'}(a[\mathbf{id.true}][\mathbf{p}], a[\mathbf{id.false}][\mathbf{p}]) : A[\mathbf{p.Bool}]
+}
+\]
+We can pull-back the result using $\Gamma.\mathbf{Bool} \vdash \mathbf{q} : \mathbf{Bool}$. 
+\[\Gamma.\mathbf{Bool} \vdash \mathbf{if'}(a[\mathbf{id.true}], a[\mathbf{id.false}])[\mathbf{p.Bool}][\mathbf{id.q}] \] \[= \mathbf{if'}(a[\mathbf{id.true}][\mathbf{p}], a[\mathbf{id.false}][\mathbf{p}])[\mathbf{id.q}] : A[\mathbf{p.Bool}][\mathbf{id.q}]\]
+\\
+Rewrite this as 
+\[
+\Gamma.\mathbf{Bool} \vdash \mathbf{if'}(a[\mathbf{id.true}], a[\mathbf{id.false}]) = \mathbf{if}(a[\mathbf{id.true}][\mathbf{p}], a[\mathbf{id.false}][\mathbf{p}], \mathbf{q}) : A 
+\]
+\\
+However, we already know that $\mathbf{id.true} \circ \mathbf{p} = \mathbf{p}.A \circ \mathbf{id.true'}$ where $\mathbf{id.true}$ is arrow $\Gamma.\mathbf{Bool} \rightarrow \Gamma.\mathbf{Bool.Bool}$. Then ,  
+\[
+\Gamma.\mathbf{Bool} \vdash \mathbf{if'}(a[\mathbf{id.true}], a[\mathbf{id.false}]) = \mathbf{if}(a[\mathbf{p}.A][\mathbf{id.true'}], a[\mathbf{p}.A][\mathbf{id.false'}], \mathbf{q}) : A 
+\]
+However, the $\eta$-rule of given $\mathbf{if}$ on $\Gamma.\mathbf{Bool}$ context implies that 
+\[\mathbf{if'}(a[\mathbf{id.true}], a[\mathbf{id.false}]) = \mathbf{if}(a[\mathbf{p}.A][\mathbf{id.true'}], a[\mathbf{p}.A][\mathbf{id.false'}], \mathbf{q}) = a[\mathbf{p.A}][\mathbf{id.q}] : A\]
+Then finally, we can holds 
+\[\Gamma.\mathbf{Bool} \vdash \mathbf{if'}(a[\mathbf{id.true}], a[\mathbf{id.false}]) = a : A\]
+This is proof of $\eta$-rule for $\mathbf{if'}$. 
+\end{proof}
+
+\end{tcolorbox}
+
+
 \newpage 
 .
 \end{document}

@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1760276781.92207 "/Users/hojunelee/Desktop/Files/KAIST/2025_Fall/CS520_Graduate_PL/Dependent_Type_Theory/Dependent_Type_Theory.tex" "Dependent_Type_Theory.pdf" "Dependent_Type_Theory" 1760276783.67353 0
-  "/Users/hojunelee/Desktop/Files/KAIST/2025_Fall/CS520_Graduate_PL/Dependent_Type_Theory/Dependent_Type_Theory.tex" 1760276781.7314 85339 bebbc650d726a2766e57d3240ca80d79 ""
+["pdflatex"] 1760689657.68271 "/Users/hojunelee/Desktop/Files/KAIST/2025_Fall/CS520_Graduate_PL/Dependent_Type_Theory/Dependent_Type_Theory.tex" "Dependent_Type_Theory.pdf" "Dependent_Type_Theory" 1760689659.46013 0
+  "/Users/hojunelee/Desktop/Files/KAIST/2025_Fall/CS520_Graduate_PL/Dependent_Type_Theory/Dependent_Type_Theory.tex" 1760689655.6358 99346 3f1b669c6922f97b0c11571a315c4e83 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/jknappen/ec/tcrm1200.tfm" 1136768653 1536 74b7293ec3713bb7fdca8dd1bd1f469c ""
@@ -283,10 +283,10 @@
   "/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1732165405.71958 5467645 128b85b7cde5f5edc5cb7f1dd7ff8736 ""
   "/usr/local/texlive/2024/texmf-var/web2c/pdftex/pdflatex.fmt" 1732165383 8221430 c0e98d3898fb635f1397633d7318457b ""
   "/usr/local/texlive/2024/texmf.cnf" 1710266656 577 e590dabc9e28c5b61546e15f63eebcdf ""
-  "Dependent_Type_Theory.aux" 1760276783.58699 2591 25a81a779ee2d56980b611e1f7aef50d "pdflatex"
-  "Dependent_Type_Theory.out" 1760276783.58756 2147 dd1f2e4e65ab6b766496b2684c28f227 "pdflatex"
-  "Dependent_Type_Theory.tex" 1760276781.7314 85339 bebbc650d726a2766e57d3240ca80d79 ""
-  "Dependent_Type_Theory.toc" 1760276783.58771 1086 f4281061676c33bda1becc2c96a53016 "pdflatex"
+  "Dependent_Type_Theory.aux" 1760689659.37397 2701 7bdd08212f601d131a3efdab78a13ca2 "pdflatex"
+  "Dependent_Type_Theory.out" 1760689659.37456 2242 260995f0c1006ca4f3b78d6fcd49cd7c "pdflatex"
+  "Dependent_Type_Theory.tex" 1760689655.6358 99346 3f1b669c6922f97b0c11571a315c4e83 ""
+  "Dependent_Type_Theory.toc" 1760689659.37472 1155 1e62fea1557adaf71d6f003d33b147b4 "pdflatex"
   (generated)
   "Dependent_Type_Theory.aux"
   "Dependent_Type_Theory.log"
