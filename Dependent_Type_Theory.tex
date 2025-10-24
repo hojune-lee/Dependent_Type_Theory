@@ -2076,10 +2076,10 @@ We can write this as
 \[
 \inferrule
 {
-    \Gamma.\mathbf{Bool} \vdash \mathbf{p} : \Gamma \quad \Gamma.\mathbf{Bool} \vdash a : A \quad \Gamma \vdash a[\mathbf{id.true}] : A[\mathbf{id.true}] \quad \Gamma \vdash a[\mathbf{id.false}] : A[\mathbf{id.false}]
+    \Gamma.\mathbf{Bool} \vdash \mathbf{p} : \Gamma \quad \Gamma.\mathbf{Bool} \vdash a : A \quad \\ \Gamma \vdash a[\mathbf{id.true}] : A[\mathbf{id.true}] \quad \Gamma \vdash a[\mathbf{id.false}] : A[\mathbf{id.false}]
 }
 {
-    \Gamma.\mathbf{Bool}.\mathbf{Bool} \vdash \mathbf{if'}(a[\mathbf{id.true}], a[\mathbf{id.false}])[\mathbf{p.Bool}] = \mathbf{if'}(a[\mathbf{id.true}][\mathbf{p}], a[\mathbf{id.false}][\mathbf{p}]) : A[\mathbf{p.Bool}]
+    \Gamma.\mathbf{Bool}.\mathbf{Bool} \vdash \mathbf{if'}(a[\mathbf{id.true}], a[\mathbf{id.false}])[\mathbf{p.Bool}] \\ = \mathbf{if'}(a[\mathbf{id.true}][\mathbf{p}], a[\mathbf{id.false}][\mathbf{p}]) : A[\mathbf{p.Bool}]
 }
 \]
 We can pull-back the result using $\Gamma.\mathbf{Bool} \vdash \mathbf{q} : \mathbf{Bool}$. 
@@ -2095,7 +2095,7 @@ However, we already know that $\mathbf{id.true} \circ \mathbf{p} = \mathbf{p}.A 
 \Gamma.\mathbf{Bool} \vdash \mathbf{if'}(a[\mathbf{id.true}], a[\mathbf{id.false}]) = \mathbf{if}(a[\mathbf{p}.A][\mathbf{id.true'}], a[\mathbf{p}.A][\mathbf{id.false'}], \mathbf{q}) : A 
 \]
 However, the $\eta$-rule of given $\mathbf{if}$ on $\Gamma.\mathbf{Bool}$ context implies that 
-\[\mathbf{if'}(a[\mathbf{id.true}], a[\mathbf{id.false}]) = \mathbf{if}(a[\mathbf{p}.A][\mathbf{id.true'}], a[\mathbf{p}.A][\mathbf{id.false'}], \mathbf{q}) = a[\mathbf{p.A}][\mathbf{id.q}] : A\]
+\[\mathbf{if'}(a[\mathbf{id.true}], a[\mathbf{id.false}])\] \[ = \mathbf{if}(a[\mathbf{p}.A][\mathbf{id.true'}], a[\mathbf{p}.A][\mathbf{id.false'}], \mathbf{q}) \] \[ = a[\mathbf{p.A}][\mathbf{id.q}] : A\]
 Then finally, we can holds 
 \[\Gamma.\mathbf{Bool} \vdash \mathbf{if'}(a[\mathbf{id.true}], a[\mathbf{id.false}]) = a : A\]
 This is proof of $\eta$-rule for $\mathbf{if'}$. 
@@ -2105,5 +2105,7 @@ This is proof of $\eta$-rule for $\mathbf{if'}$.
 
 
 \newpage 
-.
+
+\section{Natural Number}
+
 \end{document}
