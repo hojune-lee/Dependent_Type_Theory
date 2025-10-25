@@ -2108,4 +2108,113 @@ This is proof of $\eta$-rule for $\mathbf{if'}$.
 
 \section{Natural Number}
 
+Natural number is actually, most important and intuitive type that we need. 
+However, I think that this also most challenging one to understand. Before start construction, 
+I'll introduce the notion of natural number in \lq logic' definitions. In the logic courses, 
+they introduce natural number as the \textbf{least} recursively defined set $\mathbb{N}$, 
+with \textbf{zero} and \textbf{suc}(-) : $\mathbb{N} \rightarrow \mathbb{N}$. 
+We'll try to characterize this set in our type system. (as we've seen before, we internalize the intuitive external structure into our type system via follow-up the characterization of external structure into type system. )
+First, without the \textbf{least} characterization, the characterization of such recursively defined set is easy. 
+
+
+\begin{tcolorbox}[breakable, colback=yellow!10!white,colframe=green!75!black,title=Construction 3.4.1.]\hypertarget{const 3.4.1.}{}
+\begin{mathpar}
+\inferrule
+{ }
+{
+    \Gamma \vdash \mathbf{Nat} \text{ type}
+}
+\and  
+\inferrule
+{ }
+{
+    \Gamma \vdash \mathbf{zero} : \mathbf{Nat}
+}
+\and  
+\inferrule 
+{
+    \Gamma \vdash n : \mathbf{Nat}
+}
+{
+    \Gamma \vdash \mathbf{suc}(n) : \mathbf{Nat}
+}
+\end{mathpar}
+(Actually, this is similar to define $\mathbb{N}$ is a set, such that $\mathbf{zero} \in \mathbb{N}, \forall n \in \mathbb{N}, \mathbf{suc}(n) \in \mathbb{N}$. )
+\begin{mathpar}
+\inferrule
+{
+    \Delta \vdash \gamma : \Gamma   
+}
+{
+    \Delta \vdash \mathbf{Nat}[\gamma] = \mathbf{Nat} : \Gamma   
+}
+\and   
+\inferrule
+{
+    \Delta \vdash \gamma : \Gamma   
+}
+{
+    \Delta \vdash \mathbf{zero}[\gamma] = \mathbf{zero} : \mathbf{Nat}
+}
+\end{mathpar}
+\[
+\inferrule
+{
+    \Delta \vdash \gamma : \Gamma  \quad \Gamma \vdash n : \mathbf{Nat}
+}
+{
+    \Delta \vdash \mathbf{suc}(n)[\gamma] = \mathbf{suc}(n[\gamma]) : \mathbf{Nat}
+}
+\]
+\end{tcolorbox}
+\vspace{4mm}
+\noindent However, everything is now starting. As we've seen in previous section \textbf{Bool}, reader will immediately capture that we need Lazy Evaluation. 
+It's because of decidability, if we try to capture natural number as $Tm(\Gamma, \mathbf{Nat}) \cong \mathbb{N}$, 
+then our type checker can detect \lq divide by zero' which is undecidable problem. 
+So to ensure our type checker decidable, we also choose Lazy Evaluation scheme for \textbf{Nat} also. In this point, as same with before, our first trial will be following. 
+
+\begin{tcolorbox}[breakable, colback=yellow!10!white,colframe=red!75!black,title=Wrong Construction 3.4.2.]\hypertarget{wrong const 3.4.2.}{}
+Oh, as same with \textbf{Bool}, the term $\mathbf{q}$ in $\Gamma.\mathbf{Nat}$ can be interpreted 
+into $\Gamma$ via $\mathbf{zero}$ or $\mathbf{suc}$ of something. Then construct each mapping as : 
+\[(\mathbf{id.zero}^*) : Tm(\Gamma.\mathbf{Nat}, A) \rightarrow Tm(\Gamma, A[\mathbf{id.zero}])\]
+\[(\mathbf{p.suc(q)}^*) : Tm(\Gamma.\mathbf{Nat}, A) \rightarrow Tm(\Gamma.\mathbf{Nat}, A[\mathbf{p.suc(q)}])\]
+\noindent Below one change all appearance of $\mathbf{q}$ in original $A$ into $\mathbf{suc}(\mathbf{q})$. 
+So the context does not be changed. Then finally our natural isomorphism structure is : 
+\begin{align*}
+    ((\mathbf{id.zero})^*,& (\mathbf{p.suc(q)})^*) : \\ 
+    & Tm(\Gamma.\mathbf{Nat}, A) \cong Tm(\Gamma, A[\mathbf{id.zero}]) \times Tm(\Gamma.\mathbf{Nat}, A[\mathbf{p}.\mathbf{suc}(\mathbf{q})])
+\end{align*}
+\end{tcolorbox}
+
+\noindent However, it is not enough to characterize the \textbf{least} property. 
+It means that, can you conclude that above \textbf{Nat} is exactly same with $\mathbb{N} = \{0, 1, 2, \cdots \}$ ? 
+Actually, you can't. Many other larger sets can holds above isomorphism. Suppose that our \textbf{Nat} is $\mathbb{N}_{\infty} = \mathbb{N} \cup \{\infty\}$, 
+above isomorphism also holds. Moreover, $\mathbb{R}_{\geq 0}$ also holds. To match \textbf{Nat} with $\mathbb{N}$, 
+one we must do is obtain \textbf{least} property. It can be understood in Algebraic Perspective. 
+First, we can write \textbf{equation} that determine our \textbf{Nat} type as follow. 
+\[N \cong \{\star\} \sqcup N\] 
+\noindent The form of solution of this equation is triple : (N, \textbf{zero}, \textbf{suc}(-)).  Can you see that this equation is Algebraic presentation of \hyperlink{wrong const 3.4.2.}{wrong const 3.4.2.}? 
+As I wrote, there can be many solutions for above algebraic equation. 
+Our intended job is distinguish the solution ($\mathbb{N}$, 0, \_ + 1), which is meta-level natural number 
+with another solutions and internalize it into our type system. See following Algebraic observations. 
+
+\begin{tcolorbox}[breakable, colback=yellow!10!white,colframe=green!75!black,title=Observation 3.4.3.]\hypertarget{obs 3.4.3.}{}
+Let $(\mathbb{N}, 0, \_ + 1)$ be our targeted solution. And there are many another solutions, we represents $(N, z, s)$. 
+Then one can imagine the $homomorphism$ from $(\mathbb{N}, 0, \_ + 1)$ to $(N, z, s)$. 
+Which intuitively means that, Algebra interpreter from $\mathbb{N}$ to $N$. 
+Suppose a map $f : \mathbb{N} \rightarrow N$ such that $f(0) = z$, $f(n + 1) = s(f(n))$. 
+Then here, you know that $f$ preserves the Algebraic property, i.e. give meaning $0$ to $z$ and $\_ + 1$ to $s$. 
+In mathematics' terminology, $(N, z, s)$ triple is called algebras for the signature $N \rightarrowtail \{\star\} \sqcup N$. And such structure preserving function between algebras $f$ is called $algebra$ $homomorphism$. 
+And such \textbf{least} algebra $(\mathbb{N}, 0, \_ + 1)$ is called $initial$ $algebra$. 
+One important fact is that, we can \textbf{characterize such initial algebra via following fact : } There are unique $homomorphism$ from initial algebra to another algebras. 
+\end{tcolorbox}
+
+\noindent What can we do here is that, (1) extends this into dependent Algebra, (2) internalize the unique homomorphism characterization into our type system. 
+To understand this, first we must know what is \textbf{Dependent Algebra}? and why we need them? 
+
+
+\newpage 
+
+temp 
+
 \end{document}
