@@ -2211,10 +2211,43 @@ One important fact is that, we can \textbf{characterize such initial algebra via
 
 \noindent What can we do here is that, (1) extends this into dependent Algebra, (2) internalize the unique homomorphism characterization into our type system. 
 To understand this, first we must know what is \textbf{Dependent Algebra}? and why we need them? 
+\textbf{Dependent Algebra} is very similar to our dependent type system. Suppose the \textbf{Vec} $A$ $n$ example again, 
+this algebra structure is represented by \lq indexed family' of \textbf{Nat}. 
+\[\mathbf{Vec}~A~0 = \emptyset\]
+\[\mathbf{Vec}~A~1 = \{a | a \in Tm(\Gamma, A)\}\]
+\[\vdots\]
+\[\mathbf{Vec}~A~\mathbf{suc}(n) = \{v::a | v \in Tm(\Gamma, \mathbf{Vec}~A~n), a \in Tm(\Gamma, A) \}\]
+\noindent Here, the algebraic structure of (\textbf{Nat}, 0, \textbf{suc}(-)) is hidden. This is example of dependent algebra, 
+and we call that $displayed$ $algebra$ $over$ (\textbf{Nat}, 0, \textbf{suc}(-)). More formally, 
+the definition is following. 
+
+\begin{tcolorbox}[breakable, colback=yellow!10!white,colframe=green!75!black,title=Definition 3.4.4.]\hypertarget{defn 3.4.4.}{}
+The $displayed$ $algebra$ $over$ $(N, z, s)$ (here, this is algebra of the signature $N \rightarrowtail \{\star\} \sqcup N$ ) is defined by triple : 
+\[(\{\tilde{X}_n\}_{n \in N}, \tilde{z} \in \tilde{X}_n, \tilde{s} : (n : N) \rightarrow \tilde{X}_n \rightarrow \tilde{X}_{s(n)})\]
+Suppose the initial algebra $(\mathbb{N}, 0, \_ + 1)$. And we construct any displayed algebra 
+\[\left( \{\tilde{X}_n\}_{n \in \mathbb{N}}, \tilde{z} \in \tilde{X}_0, \tilde{s} : (n : \mathbb{N}) \rightarrow \tilde{X}_n \rightarrow \tilde{X}_{n+1} \right) \]
+
+The \textbf{initial} condition here is that, there is unique algebra homomorphism 
+\[f : (n : \mathbb{N}) \rightarrow \tilde{X}_n\]
+such that $f(0) = \tilde{z}$ and $f(n+1) = \tilde{s}(n, f(n))$
+\\
+Actually, the role of $f$ here is directly proof of for all $n \in \mathbb{N}$ statements. 
+Because, we can imagine that such displayed algebra is given by propositions indexed by $\mathbb{N}$. 
+\end{tcolorbox}
+\noindent Now it's time to internalize this notion into our type system. 
+We'll axiomatize above initiality which is described in \hyperlink{defn 3.4.4.}{defn 3.4.4.}
+It means that, our natural number algebra (\textbf{Nat}, \textbf{zero}, \textbf{suc}(-)) in our type system 
+holds that, for all displayed algebra over (\textbf{Nat}, \textbf{zero}, \textbf{suc}(-)), there exists unique homomorphism from (\textbf{Nat}, \textbf{zero}, \textbf{suc}(-)). 
+Now, very challenging notions is upcoming. We'll imagine the \lq displayed algebra' is 
+\[A \in Ty(\Gamma.\mathbf{Nat})\]
+We can understand that this is a kind of \lq family of terms with type $A$, \textbf{q} in $A$ is indexed by \textbf{Nat}'. 
+Then for any context $\Gamma$, we can construct displayed algebra over (\textbf{Nat}, \textbf{zero}, \textbf{suc}(-)) by 
+\[\left(A \in Ty(\Gamma.\mathbf{Nat}), a_z \in Tm(\Gamma, A[\mathbf{id.zero}]), a_s \in Tm(\Gamma.\mathbf{Nat}.A, A[\mathbf{p}^2.\mathbf{suc}(\mathbf{q}[\mathbf{p}])])\right)\]
+We can understand that above as propositional perspective. $A$ is $\mathbf{q}$-indexed proposition. 
+And $a_z$ is zero-index instance(proof). challenging one is $a_s$, why this represents successor? 
 
 
-\newpage 
-
+\newpage
 temp 
 
 \end{document}
