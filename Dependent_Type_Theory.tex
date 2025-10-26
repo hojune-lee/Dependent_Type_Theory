@@ -1412,7 +1412,7 @@ true in logic. Since the constructions are simple, I'll write down without detai
 \end{mathpar}
 \end{tcolorbox}
 \newpage 
-\chapter{Inductive Types \\ : Void, Bool, +, Nat}
+\chapter{Inductive Types : Void, Bool, Nat}
 
 \section{Basic Intuitions}
 
@@ -2245,7 +2245,78 @@ Then for any context $\Gamma$, we can construct displayed algebra over (\textbf{
 \[\left(A \in Ty(\Gamma.\mathbf{Nat}), a_z \in Tm(\Gamma, A[\mathbf{id.zero}]), a_s \in Tm(\Gamma.\mathbf{Nat}.A, A[\mathbf{p}^2.\mathbf{suc}(\mathbf{q}[\mathbf{p}])])\right)\]
 We can understand that above as propositional perspective. $A$ is $\mathbf{q}$-indexed proposition. 
 And $a_z$ is zero-index instance(proof). challenging one is $a_s$, why this represents successor? 
+See following diagram first. 
+\[
+\begin{tikzcd}
+    \Gamma & \Gamma.\mathbf{Nat} \arrow[l, "p"']\\
+    \Gamma.\mathbf{Nat}.A \arrow[ru, "p"'] \arrow[u, red, "p^2"]
+\end{tikzcd}
+\Longrightarrow
+\begin{tikzcd}
+    \Gamma & \Gamma.\mathbf{Nat} \\
+    \Gamma.\mathbf{Nat}.A \arrow[u, "p^2"] \arrow[shift right, ru, red, "{p^2.suc(q[p])}"']
+\end{tikzcd}
+\]
+Above arrow is constructed in this way. 
+Let's unpack the meaning of $a_s$ from now on. 
+First, see $A$ type in $\Gamma.\mathbf{Nat}$ context. We already see that it's like a indexed proposition by $\mathbf{q}$. 
+However we first extend context into $\Gamma.\mathbf{Nat}.A$, this situation means that 
+we have $\mathbf{q}[\mathbf{p}] : \mathbf{Nat}$, which is fixed index $n : \mathbf{Nat}$ 
+and \textbf{proof q for $A$ indexed by q[p]}(or, $n$). (More exactly, the \textbf{q} appeared in $A$ is actually \textbf{q[p]}). 
+Important one is understanding $\mathbf{p}^2.\mathbf{suc}(\mathbf{q[p]})$. 
+It is constructed via \hyperlink{subst extend}{substitution extending}. 
+\\
+\[
+\inferrule
+{
+    \Gamma.\mathbf{Nat}.A \vdash \mathbf{p}^2 : \Gamma \quad \Gamma \vdash \mathbf{Nat} \text{ type} \quad \Gamma.\mathbf{Nat}.A \vdash \mathbf{suc(q[p])} : \mathbf{Nat}
+}
+{
+    \Gamma.\mathbf{Nat}.A \vdash \mathbf{p^2.suc(q[p])} : \Gamma.\mathbf{Nat}
+}
+\]
+\\
+So this arrow directly means that, when we pull-back from $\Gamma.\mathbf{Nat}$ world to $\Gamma.\mathbf{Nat}.A$, 
+all the appearance of \textbf{q} in $\Gamma.\mathbf{Nat}$, we'll take it into \textbf{suc(q[p])}. 
+Then finally, $A[\mathbf{p^2}.\mathbf{suc(q[p])}]$ is proposition $A$, which is indexed by \textbf{suc(q[p])}. 
+So if the term $a_s$ of such type exists, then it works like dependent function whose type is following : 
+\[\tilde{s} : (n : \mathbf{Nat}) \rightarrow \tilde{A}_n \rightarrow \tilde{A}_{suc(n)}\]
+\\
+In this understanding, we can realize that $a_s$ itself works like dependent function $\tilde{s}$. 
+Our final job is claim explicitly (\textbf{Nat}, 0, \textbf{suc}(-)) is initial algebra. 
+In the textbook, such initial property is described by 
+\[\rho_{\Gamma, A, a_z, a_s} : \{a \in Tm(\Gamma.\mathbf{Nat}, A) | a_z = a[\mathbf{id.zero}] \wedge a_s[\mathbf{p.q}.a] = a[\mathbf{p.suc(q)}]\} \cong \{\star\}\]
+\\
+In our language, I think that \lq Every proof by mathematical induction is unique'. 
+Poetically, natural number is origin(initial algebra) of whole mathematical induction and so homomorphism is unique. 
 
+Let's take a look the explicit rule version. 
+
+\begin{tcolorbox}[breakable, colback=yellow!10!white,colframe=green!75!black,title=Construction 3.4.5.]\hypertarget{const 3.4.5.}{}
+\textbf{rec} is pull-backed above singleton $a$. 
+\[
+\inferrule
+{
+    \Gamma \vdash n : \mathbf{Nat} \\
+    \Gamma.\mathbf{Nat} \vdash A \text{ type} \quad \Gamma \vdash a_z : A[\mathbf{id.zero}] \quad \Gamma.\mathbf{Nat}.A \vdash a_s : A[\mathbf{p^2.suc(q[p])}]
+}
+{
+    \Gamma \vdash \mathbf{rec}(a_z, a_s, n) : A[\mathbf{id}.n]
+}
+\]
+For naturalism,
+\[
+\inferrule
+{
+    \Delta \vdash \gamma : \Gamma \quad \Gamma \vdash n : \mathbf{Nat} \\
+    \Gamma.\mathbf{Nat} \vdash A \text{ type} \quad \Gamma \vdash a_z : A[\mathbf{id.zero}] \quad \Gamma.\mathbf{Nat}.A \vdash a_s : A[\mathbf{p^2.suc(q[p])}]
+}
+{
+    \Delta \vdash \mathbf{rec}(a_z, a_s, n)[\gamma] = \mathbf{rec}(a_z[\gamma], a_s[\gamma.\mathbf{Nat}.A], n[\gamma]) : A[\gamma.n[\gamma]]
+}
+\]
+
+\end{tcolorbox}
 
 \newpage
 temp 
