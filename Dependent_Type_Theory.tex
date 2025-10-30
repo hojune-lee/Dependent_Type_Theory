@@ -363,7 +363,7 @@ important one is understanding direction of traffic way (from now on, substituti
 \begin{tcolorbox}[colback=yellow!10!white,colframe=blue!75!black,title=Definition 1.3.1.]\label{1.3.1}
     If $\Delta \vdash \gamma : \Gamma$, then $\gamma$ is substitution from $\Delta$ to $\Gamma$. i.e. 
     \[\gamma : \Delta \rightarrow \Gamma\]
-    However, it's role is send types and terms of $\Gamma$ into $\Delta$. (Note : Direction is important)
+    However, it's role is send types and terms of $\Gamma$ into $\Delta$. (Note: Direction is important)
 \end{tcolorbox}
 
 \begin{tcolorbox}[colback=yellow!10!white,colframe=red!75!black,title=1.3.  Intuitions for direction of substitutions]\label{intuition}
@@ -539,7 +539,7 @@ The obvious thing that we must do first is, construct way from any $\Gamma$ into
 \end{mathpar}
 \end{tcolorbox}
 \vspace{4mm}
-What does it mean? It is 'way' from $\Gamma$ to $\mathbf{1}$. The role of this way is transfer terms and types in $\mathbf{1}$ into $\Gamma$ world. 
+What does it mean? It is \lq way' from $\Gamma$ to $\mathbf{1}$. The role of this way is transfer terms and types in $\mathbf{1}$ into $\Gamma$ world. 
 What terms and types are well-formed in $\mathbf{1}$? Just closed terms and types (No Variables). It is obviously 
 terms and types in $\Gamma$ also. So we define the way is \lq unique' here. With this substitution, 
 we can always transfer closed terms(e.g. 1, (1+1)) and closed types from $\mathbf{1}$ to any well-formed context $\Gamma$.  
@@ -2315,8 +2315,131 @@ For naturalism,
     \Delta \vdash \mathbf{rec}(a_z, a_s, n)[\gamma] = \mathbf{rec}(a_z[\gamma], a_s[\gamma.\mathbf{Nat}.A], n[\gamma]) : A[\gamma.n[\gamma]]
 }
 \]
-
+And we now gives the explicit description about this displayed algebraic type by rules. 
+\[
+\inferrule
+{
+    \Gamma.\mathbf{Nat} \vdash A \text{ type} \quad \Gamma \vdash a_z : A[\mathbf{id.zero}] \quad \Gamma.\mathbf{Nat}.A \vdash a_s : A[\mathbf{p^2.suc(q[p])}]
+}
+{
+    \Gamma \vdash \mathbf{rec}(a_z, a_s, \mathbf{zero}) = a_z : A[\mathbf{id.zero}]
+}
+\]
+For successor, 
+\[
+\inferrule
+{
+    \Gamma \vdash n : \mathbf{Nat} \\ 
+    \Gamma.\mathbf{Nat} \vdash A \text{ type} \quad \Gamma \vdash a_z : A[\mathbf{id.zero}] \quad \Gamma.\mathbf{Nat}.A \vdash a_s : A[\mathbf{p^2.suc(q[p])}]
+}
+{
+    \Gamma \vdash \mathbf{rec}(a_z, a_s, \mathbf{suc}(n)) = a_s[\mathbf{id}.n.\mathbf{rec}(a_z, a_s, n)[\mathbf{p}]] : A[\mathbf{id.suc}(n)]
+}
+\]
 \end{tcolorbox}
+
+\noindent One fun thing is that, the last rule directly show us that how the term $a_s$ works like proof successor here. 
+That is proof of $A[\mathbf{p^2.suc(q[p])}]$ in context $\Gamma.\mathbf{Nat}.A$, so when we take it back to $\Gamma$ with 
+substitution $\mathbf{id}.n.\mathbf{rec}(a_z, a_s, n)[\mathbf{p}]$, it become a proof of 
+\begin{align*}
+    & A\underbrace{[\mathbf{p^2.suc(q[p])}]}_{\gamma.a}\underbrace{[\mathbf{id}.n.\mathbf{rec}(a_z, a_s, n)[\mathbf{p}]]}_{\delta}  \\
+    & = A[(\gamma \circ \delta).a[\delta]] \\
+    & = A[(\mathbf{p^2} \circ \mathbf{id}.n.\mathbf{rec}(a_z, a_s, n)[\mathbf{p}]).\mathbf{suc(q[p])}[\mathbf{id}.n.\mathbf{rec}(a_z, a_s, n)[\mathbf{p}]]] \\
+    & = A[\mathbf{id}.\mathbf{suc}(n)]
+\end{align*}
+I hope that this is helpful for understanding the last rule and working of $a_s$. 
+\\
+Finally, we need $\eta$-rule for the uniqueness property. However, our textbook said that it is typically omitted. 
+The rule-form is that, 
+\[
+\inferrule
+{
+    ..., \Gamma.Nat \vdash a_s[\mathbf{p.q}.a] = a[\mathbf{p.suc(q)}] : A[\mathbf{p.suc(q)}]
+}
+{
+    \Gamma \vdash \mathbf{rec}(a_z, a_s, n) = a[\mathbf{id}.n] : A[\mathbf{id}.n]
+}
+\]
+\begin{tcolorbox}[breakable, colback=yellow!10!white,colframe=brown!75!black,title=Exercise 3.4.1.]\hypertarget{const 3.4.1.}{}
+Argue the \lq Algebraic' perspective for the \textbf{Bool} type we've learned. 
+\begin{proof}
+    
+The target initial algebra is 2-ton set. It can be described by 
+\[\text{Initial Algebra} : (\mathbb{B} = \{\text{true, false}\}, \text{true}, \text{false})\]
+Then, by same perspective, the any displayed algebra will be 
+\[\text{Displayed Algebra} : (\{\tilde{X}_t, \tilde{X}_f\}, \tilde{t} \in \tilde{X}_t, \tilde{f} \in \tilde{X}_f)\]
+And the Homomorphism will be : 
+\[Hom : (b : \mathbb{B}) \rightarrow \tilde{X}_b\]
+Then all things for argue is that, such Homomorphism is unique. 
+\[\rho_{\Gamma, A, a_t, a_f} := \{a \in Tm(\Gamma.\mathbf{Bool}, A) | a[\mathbf{id.true}] = a_t, a[\mathbf{id.false}] = a_f\} \cong \{\star\}\]
+\end{proof}
+\end{tcolorbox}
+
+\newpage 
+
+\chapter{Further topics of Chapter 3}
+
+\section{Uniqueness and Extensional Equality}
+
+I'll try to note the \lq story' for this section clearly. First, we introduced $\eta$-rule for dependent type when we \textbf{explicitly mention the uniqueness of homomorphism}. 
+Following two facts are turns out that, (1) Such uniqueness is too strong (2) Such uniqueness on inductive type is derivable with extensional equality, i.e. \textbf{Eq} type. 
+First one implies that, it can make our proof system \lq inconsistent' or our prover \lq undecidable'. Second one implies that, 
+we actually doesn't need $\eta$-rules for \lq inductive types'. So, our story line is : In this chapter, we'll show why (2) holds. And in post chapters, 
+we'll show implementation perspective, why (1) holds and what is the alternative way ( Intensional Type Theory ). 
+Intuitively, think that if we accept extensional equality, then the quotient of expression will be too large, and it leads us to inconsistent problems. 
+Let's see how (2) : Uniqueness ( $\eta$-rules ) for inductive types can be derived from extensional equalities ?
+
+\begin{tcolorbox}[breakable, colback=yellow!10!white,colframe=red!75!black,title=Theorem 4.1.1.]\hypertarget{thm 4.1.1.}{}
+Uniqueness of \textbf{Void}, i.e. $\eta$-rule for \textbf{Void} can be derived with rules for \textbf{Eq} type. 
+\[
+\inferrule
+{
+    \Gamma \vdash b : \textbf{ Void} \quad \Gamma.\mathbf{Void} \vdash a : A 
+}
+{
+    \Gamma \vdash \mathbf{absurd}(b) = a[\mathbf{id}.b] : A[\mathbf{id}.b]
+}
+\]
+\end{tcolorbox}
+
+\begin{proof}
+First, 
+\[
+\inferrule
+{
+    \Gamma \vdash b : \mathbf{ Bool} \quad \Gamma.\mathbf{Bool} \vdash A \text{ type}
+}
+{
+    \Gamma \vdash \mathbf{absurd}(b) : A[\mathbf{id}.b]
+}
+\]
+Second, 
+\[
+\inferrule
+{
+    \Gamma \vdash b \textbf{ Bool} \quad \Gamma.\mathbf{Bool} \vdash a : A 
+}
+{
+    \Gamma \vdash a[\mathbf{id}.b] : A[\mathbf{id}.b]
+}
+\]
+Third, above 2 results implies that 
+\[\Gamma \vdash \mathbf{Eq}(A[\mathbf{id}.b], \mathbf{absurd}(b), a[\mathbf{id}.b]) \text{ type}\]
+However, 
+\[\Gamma.\mathbf{Bool} \vdash \mathbf{Eq}(A[\mathbf{id}.b], \mathbf{absurd}(b), a[\mathbf{id}.b])[\mathbf{p}] \text{ type}\]
+Then, this again implies that 
+\[
+\inferrule
+{
+    \Gamma \vdash b : \mathbf{Bool} \quad \Gamma.\mathbf{Bool} \vdash \mathbf{Eq}(A[\mathbf{id}.b], \mathbf{absurd}(b), a[\mathbf{id}.b])[\mathbf{p}] \text{ type}
+}
+{
+    \Gamma \vdash \mathbf{absurd}(b) : \mathbf{Eq}(A[\mathbf{id}.b], \mathbf{absurd}(b), a[\mathbf{id}.b])
+}
+\]
+Finally, this Extensional equality directly implies that 
+\[\Gamma \vdash \mathbf{absurd}(b) = a[\mathbf{id}.b] : A[\mathbf{id}.b]\]
+\end{proof}
 
 \newpage
 temp 
