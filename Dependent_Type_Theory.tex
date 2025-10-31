@@ -2460,7 +2460,37 @@ The $\eta$-rule for \textbf{Bool} type is,
     \Gamma \vdash \mathbf{if}(a[\mathbf{id.true}], a[\mathbf{id.false}], b) = a[\mathbf{id}.b] : A[\mathbf{id}.b]
 }
 \]
-
+First, understanding following diagram. 
+\[
+\begin{tikzcd}
+    \Gamma & \Gamma.\mathbf{Bool} \arrow[l, "p"] \arrow[r, shift left, "id.q"]& \Gamma.\mathbf{Bool.Bool} \arrow[l, "p.Bool"]
+\end{tikzcd}
+\]
+And here, claim that 
+\[\Gamma \vdash \mathbf{Eq}(A[\mathbf{id}.b], \mathbf{if}(a[\mathbf{id.true}], a[\mathbf{id.false}], b), a[\mathbf{id}.b]) \text{ type}\]
+We can easily know that this is well-defined type. 
+However, the $\beta$-rules for \textbf{Bool} type gives us 
+\[\Gamma \vdash \mathbf{rfl} : \mathbf{Eq}(A[\mathbf{id.true}], \mathbf{if}(a[\mathbf{id.true}], a[\mathbf{id.false}], \mathbf{true}), a[\mathbf{id.true}])\]
+\[\Gamma \vdash \mathbf{rfl'} : \mathbf{Eq}(A[\mathbf{id.false}], \mathbf{if}(a[\mathbf{id.true}], a[\mathbf{id.false}], \mathbf{false}), a[\mathbf{id.false}])\]
+Then, we'll show that 
+\[\Gamma.\mathbf{Bool} \vdash \underbrace{\mathbf{Eq}(A, \mathbf{if}(a[\mathbf{id.true}][\mathbf{p}], a[\mathbf{id.false}][\mathbf{p}], \mathbf{q}), a)}_{B} \text{ type}\]
+By the way, if this holds, then 
+\[\Gamma \vdash \mathbf{if}(\mathbf{rfl}, \mathbf{rfl'}, b) : B[\mathbf{id.b}] = \mathbf{Eq}(A[\mathbf{id}.b], \mathbf{if}(a[\mathbf{id.true}], a[\mathbf{id.false}], b), a[\mathbf{id}.b])\]
+So it proves our original claim. Then the remaining is that, $B$ is well-formed type of context $\Gamma.\mathbf{Bool}$. 
+For the sake, since $a : A$ is given, we'll show that 
+\[\Gamma.\mathbf{Bool} \vdash \mathbf{if}(a[\mathbf{id.true}][\mathbf{p}], a[\mathbf{id.false}][\mathbf{p}], \mathbf{q}) : A\]
+It is not difficult to show because, 
+\begin{align*}
+    \Gamma.\mathbf{Bool} & \vdash a[\mathbf{id.true}][\mathbf{p}] \\
+    & : A[\mathbf{id.true}][\mathbf{p}] \\
+    & = A[\mathbf{p.true}] \\
+    & = A[\mathbf{p.Bool}][\mathbf{id.true}]
+\end{align*}
+Similarly, 
+\[\Gamma.\mathbf{Bool} \vdash a[\mathbf{id.false}][\mathbf{p}] = A[\mathbf{p.Bool}][\mathbf{id.false}]\]
+Then, by elimination rule of $\mathbf{Bool}$, 
+\[\Gamma.\mathbf{Bool} \vdash \mathbf{if}(a[\mathbf{id.true}][\mathbf{p}], a[\mathbf{id.false}][\mathbf{p}], \mathbf{q}) : A[\mathbf{p.Bool}][\mathbf{id.q}] = A\]
+This is end of proof. 
 \end{proof}
 
 \end{tcolorbox}
