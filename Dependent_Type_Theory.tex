@@ -2495,6 +2495,166 @@ This is end of proof.
 
 \end{tcolorbox}
 
+\newpage 
+
+\section{Large Elimination}
+
+By the way, we learned pretty lots of things about dependent types. 
+Is it really satisfiable? Can we do something else for dependent types? 
+The answer is trivially yes. Although we made types depends on terms, we did not make anythings 
+for dependency of type constructors. For example, one can be imagined : 
+\[
+\mathbf{UnitorBool}_{\Gamma}(b) = 
+\begin{cases}
+    \mathbf{Unit} & b = \mathbf{true} \\
+    \mathbf{Bool} & b = \mathbf{false}
+\end{cases}
+\]
+
+\noindent With rules in chapter 3, we can't implement such type formers. This kind of dependency is called full-spectrum dependency. 
+Textbook said that there are 2 way to achieve such full-spectrum dependency. 
+
+\begin{enumerate}
+    \item Large Elimination : Not popular because it make type system too strong.
+    \item Universes : Popular scheme for these days. 
+\end{enumerate}
+
+\noindent In this section, let's learn about what Large Elimination is. It is implementation of what I mentioned. 
+
+\begin{tcolorbox}[breakable, colback=yellow!10!white,colframe=blue!75!black,title=Intro 4.2.1.]\hypertarget{Intro 4.2.1}{}
+Each inductive types can equip Large Elimination. We lazy evaluate (or lazy pull-back) terms in context $\Gamma.X$ into $\Gamma$. 
+Large Elimination is just implementation this for types. We'll take types in $\Gamma.X$ into $\Gamma$. In this section, we'll focus on 
+Large Elimination for $\mathbf{Bool}$ types. The idea is that, take terms in $\Gamma.\mathbf{Bool}$ with $\Gamma \vdash b : \mathbf{Bool}$, 
+which can be $\mathbf{true}$ or $\mathbf{false}$! 
+\end{tcolorbox}
+
+
+\begin{tcolorbox}[breakable, colback=yellow!10!white,colframe=green!75!black,title=Construction 4.2.2.]\hypertarget{Const 4.2.2}{}
+\[
+\inferrule
+{
+    \Gamma \vdash A_t \text{ type} \quad \Gamma \vdash A_f \text{ type} \quad \Gamma \vdash b : \mathbf{Bool}
+}
+{
+    \Gamma \vdash \mathbf{If}(A_t, A_f, b) \text{ type}
+}
+\]
+With Natural condition : 
+\[
+\inferrule
+{
+    \Delta \vdash \gamma : \Gamma \quad  \Gamma \vdash A_t \text{ type} \quad \Gamma \vdash A_f \text{ type} \quad \Gamma \vdash b : \mathbf{Bool}
+}
+{
+    \Delta \vdash \mathbf{If}(A_t, A_f, b)[\gamma] = \mathbf{If}(A_t[\gamma], A_f[\gamma], b[\gamma]) \text{ type}
+}
+\]
+With $\beta$-rules : 
+\[
+\inferrule
+{
+    \Gamma \vdash A_t \text{ type} \quad \Gamma \vdash A_f \text{ type}
+}
+{
+    \Gamma \vdash \mathbf{If}(A_t, A_f, \mathbf{true}) = A_t \text{ type}
+    \\
+    \Gamma \vdash \mathbf{If}(A_t, A_f, \mathbf{false}) = A_f \text{ type}
+}
+\]
+\end{tcolorbox}
+
+\noindent However, there are also $\eta$-rule here. But we show that such inductive $\eta$-rules almost always omitted 
+since it make our type system too strong, and so undecidable. Same for here. Following 
+$\eta$-rule for $\mathbf{If}$ almost always non-included in our system. 
+
+\[
+\inferrule
+{
+    \Gamma.\mathbf{Bool} \vdash A \text{ type} \quad \Gamma \vdash b : \mathbf{Bool}
+}
+{
+    \Gamma \vdash \mathbf{If}(A[\mathbf{id.true}], A[\mathbf{id.false}], b) = A[\mathbf{id}.b] \text{ type}
+}
+\]
+
+\noindent By the way, we can easily imagine that this structure tried to implement following isomorphism structure : 
+\[
+Ty(\Gamma.\mathbf{Bool}) \cong Ty(\Gamma) \times Ty(\Gamma)
+\]
+The $\beta$-rule gives us forward homomorphism, and $\eta$-rule gives us backward homomorphism. 
+Now, we'll enjoy 2 examples and realize that what can we do with this Large Elimination. 
+
+\begin{tcolorbox}[breakable, colback=yellow!10!white,colframe=brown!75!black,title=Example 4.2.3.]\hypertarget{Example 4.2.3}{}
+
+One things that we can do is, generalize the eliminator for $\mathbf{Bool}$ type, which is \lq small' $\mathbf{if}$. 
+Formally, we can \lq derive' the following. 
+
+\[
+\inferrule
+{
+    \Gamma \vdash a_t : A_t \quad \Gamma \vdash a_f : A_f \quad \Gamma \vdash b : \mathbf{Bool}
+}
+{
+    \Gamma \vdash \mathbf{if}(a_t, a_f, b) : \mathbf{If}(A_t, A_f, b) 
+}
+\]
+\begin{proof}
+\noindent First, by pre-assumptions, $A_t, A_f$ are well-typed in $\Gamma$. It implies that 
+\[\Gamma.\mathbf{Bool} \vdash A_t[\mathbf{p}], A_f[\mathbf{p}] \text{ type}\]
+And in this context, one is clear that 
+\[\Gamma.\mathbf{Bool} \vdash \mathbf{q} : \mathbf{Bool}\]
+So, by introduction rule for $\mathbf{If}$, 
+\[\Gamma.\mathbf{Bool} \vdash \underbrace{\mathbf{If}(A_t[\mathbf{p}], A_f[\mathbf{p}], \mathbf{q})}_{B} \text{ type}\]
+Then, by the $\beta$-rule of $\mathbf{If}$, 
+\[\Gamma \vdash B[\mathbf{id.true}] = A_t \quad \Gamma \vdash B[\mathbf{id.false}] = A_f\]
+So we can write 
+\[\Gamma \vdash a_t : B[\mathbf{id.true}] \quad \Gamma \vdash a_f : B[\mathbf{id.false}]\]
+Then by introduction rule for $\mathbf{if}$, 
+\[\Gamma \vdash \mathbf{if}(a_t, a_f, b) : B[\mathbf{id}.b] = \mathbf{If}(A_t[\mathbf{p}], A_f[\mathbf{p}], \mathbf{q})[\mathbf{id}.b] = \mathbf{If}(A_t, A_f, b)\]
+\end{proof}
+\end{tcolorbox}
+
+\begin{tcolorbox}[breakable, colback=yellow!10!white,colframe=red!75!black,title=Theorem 4.2.4.]\hypertarget{Theorem 4.2.4.}{}
+Now we'll see one tricky theorem. The statement is really tricky, just $\mathbf{true} \neq \mathbf{false}$ in our type system. 
+One interesting thing is that, our textbook said that without Large Elimination or Universes, proving this is impossible. 
+
+\begin{proof}
+    
+Proving $\mathbf{true} \neq \mathbf{false}$ is same with find following term $\text{disjoint}$. 
+\[\mathbf{1} \vdash \text{disjoint} : \mathbf{\Pi}\left(\mathbf{Eq}(\mathbf{Bool}, \mathbf{true}, \mathbf{false}), \mathbf{Void}\right)\]
+And again, find such term is same with find following term. 
+\[\underbrace{\mathbf{1}.\mathbf{Eq}(\mathbf{Bool}, \mathbf{true}, \mathbf{false})}_{\Gamma} \vdash \text{v} : \mathbf{Void}\]
+Imagine $\Gamma.\mathbf{Bool}$ now. In here, 
+\[\Gamma.\mathbf{Bool} \vdash \mathbf{Unit} \text{ type} \quad \Gamma.\mathbf{Bool} \vdash \mathbf{Void} \text{ type}\]
+So by the introduction rule for $\mathbf{If}$, 
+\[\Gamma.\mathbf{Bool} \vdash \underbrace{\mathbf{If}(\mathbf{Unit}, \mathbf{Void}, b)}_{P} \text{ type}\]
+However, the $\beta$-rule for $\mathbf{If}$ also implies that 
+\[\Gamma \vdash P[\mathbf{id.true}] = \mathbf{Unit}[\mathbf{id.true}] = \mathbf{Unit} \text{ type}\]
+and vice versa,  
+\[\Gamma \vdash P[\mathbf{id.false}] = \mathbf{Void} \text{ type}\]
+However, 
+\[\Gamma \vdash \mathbf{q} : \mathbf{Eq}(\mathbf{Bool}, \mathbf{true}, \mathbf{false})\]
+So extensional equality gives us 
+\[\mathbf{true} = \mathbf{false} \implies P[\mathbf{id.false}] = \mathbf{Void} = \mathbf{Unit} = P[\mathbf{id.true}]\]
+So, 
+\[\Gamma \vdash \mathbf{tt} : \mathbf{Unit} = \mathbf{Void}\]
+This implies that there are term $v : \mathbf{Void}$ in $\Gamma$, means that $\text{disjoint} = \lambda(\mathbf{tt})$. So proof is done.
+
+\end{proof}
+
+\end{tcolorbox}
+
+\noindent However, there are some limitations when we imagine Large Elimination for $\mathbf{Nat}$ types. By mirroring, we reach following rule : 
+\[
+\inferrule
+{
+    \Gamma \vdash n : \mathbf{Nat} \quad \Gamma.\mathbf{Nat} \vdash A_z \text{ type} \quad \Gamma.\mathbf{Nat}.\text{type} \vdash A_s \text{type}
+}
+{
+    \Gamma \vdash \mathbf{Rec}(A_z, A_s, n) \text{ type}
+}
+\]
+Which is very non-trivial. 
 \newpage
 temp 
 
